@@ -1,0 +1,281 @@
+# Data Frame Details
+
+R comes with with a variety of built-in data sets that are very useful for getting used to data sets and how to manipulate them.
+
+```{r eval=FALSE}
+AirPassengers           Monthly Airline Passenger Numbers 1949-1960
+BJsales                 Sales Data with Leading Indicator
+BOD                     Biochemical Oxygen Demand
+CO2                     Carbon Dioxide Uptake in Grass Plants
+ChickWeight             Weight versus age of chicks on different diets
+DNase                   Elisa assay of DNase
+Formaldehyde            Determination of Formaldehyde
+HairEyeColor            Hair and Eye Color of Statistics Students
+Harman23.cor            Harman Example 2.3
+Harman74.cor            Harman Example 7.4
+Indometh                Pharmacokinetics of Indomethacin
+InsectSprays            Effectiveness of Insect Sprays
+JohnsonJohnson          Quarterly Earnings per Johnson & Johnson Share
+LakeHuron               Level of Lake Huron 1875-1972
+LifeCycleSavings        Intercountry Life-Cycle Savings Data
+Loblolly                Growth of Loblolly pine trees
+Nile                    Flow of the River Nile
+Orange                  Growth of Orange Trees
+OrchardSprays           Potency of Orchard Sprays
+PlantGrowth             Results from an Experiment on Plant Growth
+Puromycin               Reaction Velocity of an Enzymatic Reaction
+Theoph                  Pharmacokinetics of Theophylline
+```
+
+## An Example
+
+Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or "features" that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogenous. When viewed as a column, the data is homogenous. 
+
+```{r}
+data(mtcars)
+mtcars
+```
+
+We can do this with this data such as make plots or create models:
+
+
+```{r cars}
+plot(mpg ~ wt, data=mtcars)
+```
+
+Let's create a regression model. It doesn't take long to realize that most functions in R will use a data frame as input. This means that you will spend a lot of time working with data frames to get them into shape for use with modeling and visualization tools. In fact you will spend most of your time **importing, transforming, and cleaning**. 
+
+```{r}
+(mylm <- lm(mpg ~ ., data = mtcars))
+```
+
+
+There are some useful functions that help you understand the structure of a data frame. One of the most important ones is called the **str()** function which is short hand for **structure**.
+
+## Structure
+
+```{r}
+str(mtcars)
+```
+
+This gives you some idea about the number of rows and columns of the data frame along with a description of the variable types and their values. I use this function frequently. Other functions that will help you include the following. 
+
+## Meta Information
+
+```{r}
+# how many rows
+nrow(mtcars) 
+
+# how many columns
+ncol(mtcars) 
+
+# Column names
+names(mtcars)
+
+```
+
+## Printing
+
+Some data frames, such as mtcars, don't have many rows but others might have hundreds, thousands or even more than that ! Imagine trying to view one of those data frames. It is for this reason that the **head()** and **tail()** functions exist. 
+
+```{r}
+head(mtcars,5) # First 5 rows
+tail(mtcars,3) # Last 3 rows
+```
+
+## Accessing Rows And Columns
+
+There are various ways to select, remove, or exclude rows and columns of a data frame. We use the **bracket** notation to do this. This is very powerful. Keep in mind that data frames have rows and columns so it would make sense that you need a way to specify what rows and columns you want to access. 
+
+```{r}
+mtcars[1,]     # First row, all columns
+```
+```{r}
+mtcars[1:3,]   # First three rows, all columns
+
+```
+
+
+
+```{r}
+# All rows, and first 4 columns
+mtcars[,1:4]   
+
+```
+
+
+```{r}
+# Rows 1-5 and columns 1,2 and 8-10
+mtcars[1:4,c(1:2,8:10)]
+```
+
+
+
+```{r}
+# Rows 1-5 and columns 1,2 and 8-10
+mtcars[1:4,c(1:2,8:10)]
+```
+
+
+```{r}
+# Rows 1-5 and columns by name
+mtcars[1:4,c("mpg","wt","drat")]
+```
+
+## Interrogating
+
+Many times you will wish to find rows that satisfy certain conditions. For example, what rows have an mpg > 11 and at 
+wt < 2.0 ? We use the bracket notation to help us. We can pass logical conditions into the brackets. Note the following:
+
+```{r}
+mtcars$mpg > 11 & mtcars$wt < 2.0
+```
+
+There are 32 elements in this logical vector each with a value of either TRUE or FALSE. When passed into the row index of the bracket notation, it will print that row if the corresponding value is TRUE. If FALSE, the row will not be printed. 
+
+
+```{r}
+mtcars[mtcars$mpg > 11 & mtcars$wt < 2.0,]
+```
+
+What if we just want to know how many cars satisfy this condition ? 
+
+```{r}
+nrow(mtcars[mtcars$mpg > 11 & mtcars$wt < 2.0,])
+```
+
+Find all rows that correspond to cars with 4 cylinders 
+
+```{r}
+mtcars[mtcars$cyl == 4,]
+```
+
+We can even use other R functions in the bracket notation. Extract all rows whose MPG value exceeds the mean MPG for the entire data frame.
+
+```{r}
+mtcars[mtcars$mpg > mean(mtcars$mpg),]
+```
+
+Now find the cars for which the MPG exceeds the 75% percentile value for MPG
+
+```{r}
+mtcars[mtcars$mpg > quantile(mtcars$mpg)[4],]
+```
+
+## Missing values
+
+This is big deal. Most "real" data has rows that do not contain values for all columns. This is the so called "missing value" problem. Here is an example. The following code will read in a version of the mtcars data frame that has some missing values:
+
+```{r}
+url <- "https://raw.githubusercontent.com/steviep42/utilities/master/data/mtcars_na.csv"
+(mtcars_na <- read.csv(url, stringsAsFactors = FALSE))
+```
+
+If you look, you can see the missing values "NA" present in certain columns. This is R's way of indicating what is missing. There are functions that can help you find these. This is important because, for example, if you wanted to find the average value of a column, say the **wt** column then there will be a problem as it contains a missing value:
+
+```{r}
+mean(mtcars_na$wt)
+```
+
+We have to tell the function to remove missing values from consideration.
+
+```{r}
+mean(mtcars$wt, na.rm=TRUE)
+```
+
+A more general approach would involve the following functions. 
+
+```{r}
+complete.cases(mtcars_na)
+```
+
+```{r}
+# How many rows in the df do not contain any NAs ?
+sum(complete.cases(mtcars_na))
+
+# How many rows in the df do contain at least one NA ?
+sum(!complete.cases(mtcars_na))
+```
+
+How would we find those rows and print them ? 
+
+```{r}
+mtcars_na[complete.cases(mtcars_na),]
+```
+
+And here are the ones that do contain missing values:
+
+```{r}
+mtcars_na[!complete.cases(mtcars_na),]
+```
+
+One quick way to omit rows with missing values is:
+
+```{r}
+na.omit(mtcars_na)
+```
+
+
+## Continuous vs Factors
+
+One **recipe** that I use frequently is given below. This tells me how many unqiue values are assumed by each column which then helps to  identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don't let the code here scare you. If you are new to R and don't yet understand what is going on then just use this as a "recipe" for now. 
+
+```{r}
+sapply(mtcars, function(x) length(unique(x)))
+```
+
+So it looks to me, for example, that **cyl, vs, am, gear, and carb** are actually categories rather than measured quantities. If you look at the help page for mtcars you will see that **am** is a 0 or 1 which corresponds to, respectively, a car with an automatic transmission (0) or a manual transmission (1). If you use the **summarize** function it will treat this variable as a numeric, continuous quantity. 
+
+Is it actually possible to have a transmission value of 0.4062 ? 
+
+```{r}
+summary(mtcars$am)
+```
+
+I might then use some code to transform this into factors so that when they are used with various modeling functions they will be recognized as such. For example, if we summarize the data frame right now, we will see the following
+
+```{r}
+summary(mtcars$am)
+```
+
+Let's turn **am** into a factor
+
+```{r}
+mtcars$am <- factor(mtcars$am, 
+                    levels = c(0,1), 
+                    labels = c("Auto","Man") )
+```
+
+Now the summary will make more sense. This is also useful because graphics packages such as ggplot2 will know how to handle factors.
+
+```{r}
+summary(mtcars$am)
+```
+
+
+```{r echo=FALSE}
+suppressMessages(library(tidyverse))
+```
+
+
+```{r}
+ggplot(mtcars,aes(x=wt,y=mpg)) + 
+  geom_point() + 
+  facet_wrap(~am)
+```
+
+## Sorting data
+
+Sorting rows in a data fram is a common activity. However, in Base R this is called "ordering" because of the function used to "order" the data. Let's say we want to sort or "order" the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the **order** function's output. What are those numbers ? 
+
+
+```{r}
+order(mtcars$mpg)
+```
+
+Oh, so they are row numbers corresponding to rows in mtcars. Row 15 has the car with the lowest mpg. Row 16 corresponds to the car with the next lowest mpg and so on. So we can use this information to order our dataframe accordingly:
+
+```{r}
+mtcars[order(mtcars$mpg),]
+```
+

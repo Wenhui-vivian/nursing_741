@@ -1,0 +1,6 @@
+book_filename: "nursing_741"
+delete_merged_file: true
+output_dir: "book"
+language:
+  ui:
+    chapter_name: "Chapter "

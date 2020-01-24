@@ -1,0 +1,68 @@
+--- 
+title: "Intro To dplyr"
+author: "Steve Pittard"
+date: "`r Sys.Date()`"
+bibliography:
+- book.bib
+- packages.bib
+description: An Intro to data manipulation with dplyr
+documentclass: book
+link-citations: yes
+site: bookdown::bookdown_site
+biblio-style: apalike
+---
+
+# R Data Structures
+
+![](./figures/dframe.png){width=300}
+
+There are a number of data structures in R such as **vectors, lists, matricies** and **arrays** but the the premier data structure in R is known as the **data.frame**. This structure can be described as follows:
+
+  - A data frame is a special type of list that contains data in a format that allows for easier manipulation, reshaping, and open-ended analysis
+  
+  - Data frames are tightly coupled collections of variables. It is one of the more important constructs you will encounter when using R so learn all you can about it
+  
+  - A data frame is an analogue to the Excel spreadsheet but is much more flexible for storing, manipulating, and analyzing data
+  
+  - Data frames can be constructed from existing vectors, lists, or matrices. Many times they are created by reading in comma delimited files, (CSV files), using the read.table command
+  
+Once you become accustomed to working with data frames, R becomes so much easier to use. In fact, it could be well argued tht UNTIL you wrap your head around the data frame concept then you cannot be productive in R. This is mostly true, in my experience. 
+
+## A Reference Data Frame
+
+We will use a well-known data frame, at least in R circles, called **mtcars** which is part of any default installation of R. It is a simple data set relating to, well, automobiles. 
+
+```{r eval=FALSE}
+The data was extracted from the 1974 Motor Trend US 
+magazine, and comprises fuel consumption and 10 aspects 
+of automobile design and performance for 32 automobiles 
+(1973–74 models).
+
+A data frame with 32 observations on 11 (numeric) 
+variables.
+
+[, 1]	mpg	Miles/(US) gallon
+[, 2]	cyl	Number of cylinders
+[, 3]	disp	Displacement (cu.in.)
+[, 4]	hp	Gross horsepower
+[, 5]	drat	Rear axle ratio
+[, 6]	wt	Weight (1000 lbs)
+[, 7]	qsec	1/4 mile time
+[, 8]	vs	Engine (0 = V-shaped, 1 = straight)
+[, 9]	am	Transmission (0 = automatic, 1 = manual)
+[,10]	gear	Number of forward gears
+[,11]	carb	Number of carburetors
+```
+
+## Relation to dplyr
+
+What you will discover is that the **dplyr** package, which is part of the much larger **tidyverse** package set, extends upon the idea of the basic R data frame in a way that some feel is superior. It depends on your point of view though the **tidyverse** has a lot of consistency in it which makes it **very** useful. However you will inevitably encounter older R code which does not use it. This is why you have to have some basic understanding of the basic data frame concept. 
+
+
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
