@@ -1,4 +1,4 @@
-# An Example
+# Digging In
 
 Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or "features" that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogenous. When viewed as a column, the data is homogenous. 
 
@@ -93,7 +93,7 @@ mtcars[1:4,c(1:2,8:10)]
 mtcars[1:4,c("mpg","wt","drat")]
 ```
 
-## Interrogating
+## Interrogation
 
 Many times you will wish to find rows that satisfy certain conditions. For example, what rows have an mpg > 11 and at 
 wt < 2.0 ? We use the bracket notation to help us. We can pass logical conditions into the brackets. Note the following:
@@ -255,4 +255,17 @@ To invert the sense of the order use the **rev** function. We'll also use the he
 ```{r}
 head(mtcars[rev(order(mtcars$mpg)),])
 ```
+
+## Creating Data Frames From CSV Files
+
+Many times data will be read in from a comma delimited file exported from Excel. These are known as Comma Separated Value files - generally abbreviated as **CSV**. The file can be read from a local drive or even from the Web as long as you know the URL associated with the file. In this example, there is a file on the Internet relating to some testing data involving students and various subjects. 
+
+```{r}
+url <- "https://raw.githubusercontent.com/pittardsp/bios545r_spring_2018/master/SUPPORT/hsb2.csv"
+
+data1 <- read.csv(url,header=T,sep=",")
+
+head(data1)
+```
+
 

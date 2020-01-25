@@ -250,7 +250,7 @@ compared to the ``older way'' of doing things. So my recommendation is
 to know how to deal with data frames in base R while also spending time
 to learn the \textbf{dplyr} way of doing things.
 
-\chapter{An Example}\label{an-example}
+\chapter{Digging In}\label{digging-in}
 
 Data frames look like an Excel Spreadsheet. The rows are observations
 and the columns are variables or ``features'' that represent some
@@ -560,7 +560,7 @@ you want to access.
 ## Hornet 4 Drive 21.4 3.215 3.08
 \end{verbatim}
 
-\section{Interrogating}\label{interrogating}
+\section{Interrogation}\label{interrogation}
 
 Many times you will wish to find rows that satisfy certain conditions.
 For example, what rows have an mpg \textgreater{} 11 and at wt
@@ -1068,6 +1068,36 @@ why R embraced that approach early on.
 ## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1 Man    4    2
 ## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1 Man    4    1
 ## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0 Man    5    2
+\end{verbatim}
+
+\section{Creating Data Frames From CSV
+Files}\label{creating-data-frames-from-csv-files}
+
+Many times data will be read in from a comma delimited file exported
+from Excel. These are known as Comma Separated Value files - generally
+abbreviated as \textbf{CSV}. The file can be read from a local drive or
+even from the Web as long as you know the URL associated with the file.
+In this example, there is a file on the Internet relating to some
+testing data involving students and various subjects.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{url <-}\StringTok{ "https://raw.githubusercontent.com/pittardsp/bios545r_spring_2018/master/SUPPORT/hsb2.csv"}
+
+\NormalTok{data1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(url,}\DataTypeTok{header=}\NormalTok{T,}\DataTypeTok{sep=}\StringTok{","}\NormalTok{)}
+
+\KeywordTok{head}\NormalTok{(data1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    id female race ses schtyp prog read write math science socst
+## 1  70      0    4   1      1    1   57    52   41      47    57
+## 2 121      1    4   2      1    3   68    59   53      63    61
+## 3  86      0    4   3      1    1   44    33   54      58    31
+## 4 141      0    4   3      1    3   63    44   47      53    56
+## 5 172      0    4   2      1    2   47    52   57      53    61
+## 6 113      0    4   2      1    2   44    52   51      63    61
 \end{verbatim}
 
 \chapter{Literature}\label{literature}
