@@ -29,6 +29,36 @@ There are a number of data structures in R such as **vectors, lists, matricies**
   
 Once you become accustomed to working with data frames, R becomes so much easier to use. In fact, it could be well argued tht UNTIL you wrap your head around the data frame concept then you cannot be productive in R. This is mostly true, in my experience. 
 
+# Data Frame Details
+
+R comes with with a variety of built-in data sets that are very useful for getting used to data sets and how to manipulate them.
+
+```{r eval=FALSE}
+AirPassengers           Monthly Airline Passenger Numbers 1949-1960
+BJsales                 Sales Data with Leading Indicator
+BOD                     Biochemical Oxygen Demand
+CO2                     Carbon Dioxide Uptake in Grass Plants
+ChickWeight             Weight versus age of chicks on different diets
+DNase                   Elisa assay of DNase
+Formaldehyde            Determination of Formaldehyde
+HairEyeColor            Hair and Eye Color of Statistics Students
+Harman23.cor            Harman Example 2.3
+Harman74.cor            Harman Example 7.4
+Indometh                Pharmacokinetics of Indomethacin
+InsectSprays            Effectiveness of Insect Sprays
+JohnsonJohnson          Quarterly Earnings per Johnson & Johnson Share
+LakeHuron               Level of Lake Huron 1875-1972
+LifeCycleSavings        Intercountry Life-Cycle Savings Data
+Loblolly                Growth of Loblolly pine trees
+Nile                    Flow of the River Nile
+Orange                  Growth of Orange Trees
+OrchardSprays           Potency of Orchard Sprays
+PlantGrowth             Results from an Experiment on Plant Growth
+Puromycin               Reaction Velocity of an Enzymatic Reaction
+Theoph                  Pharmacokinetics of Theophylline
+```
+
+
 ## A Reference Data Frame
 
 We will use a well-known data frame, at least in R circles, called **mtcars** which is part of any default installation of R. It is a simple data set relating to, well, automobiles. 
@@ -55,9 +85,11 @@ variables.
 [,11]	carb	Number of carburetors
 ```
 
+
+
 ## Relation to dplyr
 
-What you will discover is that the **dplyr** package, which is part of the much larger **tidyverse** package set, extends upon the idea of the basic R data frame in a way that some feel is superior. It depends on your point of view though the **tidyverse** has a lot of consistency in it which makes it **very** useful. However you will inevitably encounter older R code which does not use it. This is why you have to have some basic understanding of the basic data frame concept. 
+What you will discover is that the **dplyr** package, which is part of the much larger **tidyverse** package set, extends upon the idea of the basic R data frame in a way that some feel is superior. It depends on your point of view though the **tidyverse** has a lot of consistency in it which makes it **very** useful. While you could start exclusively with **dplyr** and the **tidyverse** the world is still full of older code. Plus, many of the advantages of **dplyr** only become quite apparent when compared to the "older way" of doing things.  
 
 
 

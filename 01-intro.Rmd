@@ -1,33 +1,4 @@
-# Data Frame Details
-
-R comes with with a variety of built-in data sets that are very useful for getting used to data sets and how to manipulate them.
-
-```{r eval=FALSE}
-AirPassengers           Monthly Airline Passenger Numbers 1949-1960
-BJsales                 Sales Data with Leading Indicator
-BOD                     Biochemical Oxygen Demand
-CO2                     Carbon Dioxide Uptake in Grass Plants
-ChickWeight             Weight versus age of chicks on different diets
-DNase                   Elisa assay of DNase
-Formaldehyde            Determination of Formaldehyde
-HairEyeColor            Hair and Eye Color of Statistics Students
-Harman23.cor            Harman Example 2.3
-Harman74.cor            Harman Example 7.4
-Indometh                Pharmacokinetics of Indomethacin
-InsectSprays            Effectiveness of Insect Sprays
-JohnsonJohnson          Quarterly Earnings per Johnson & Johnson Share
-LakeHuron               Level of Lake Huron 1875-1972
-LifeCycleSavings        Intercountry Life-Cycle Savings Data
-Loblolly                Growth of Loblolly pine trees
-Nile                    Flow of the River Nile
-Orange                  Growth of Orange Trees
-OrchardSprays           Potency of Orchard Sprays
-PlantGrowth             Results from an Experiment on Plant Growth
-Puromycin               Reaction Velocity of an Enzymatic Reaction
-Theoph                  Pharmacokinetics of Theophylline
-```
-
-## An Example
+# An Example
 
 Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or "features" that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogenous. When viewed as a column, the data is homogenous. 
 
@@ -277,5 +248,11 @@ Oh, so they are row numbers corresponding to rows in mtcars. Row 15 has the car 
 
 ```{r}
 mtcars[order(mtcars$mpg),]
+```
+
+To invert the sense of the order use the **rev** function. We'll also use the head function to list only the first 5 rows of the result. Note that in base R, using composite functions is welcomed although you will find out that this is not a value in the tidyverse. For math people, using a composite function is natural which, in large part, is why R embraced that approach early on. 
+
+```{r}
+head(mtcars[rev(order(mtcars$mpg)),])
 ```
 

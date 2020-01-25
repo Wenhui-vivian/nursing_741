@@ -171,6 +171,38 @@ much easier to use. In fact, it could be well argued tht UNTIL you wrap
 your head around the data frame concept then you cannot be productive in
 R. This is mostly true, in my experience.
 
+\chapter{Data Frame Details}\label{data-frame-details}
+
+R comes with with a variety of built-in data sets that are very useful
+for getting used to data sets and how to manipulate them.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{AirPassengers           Monthly Airline Passenger Numbers }\DecValTok{1949}\OperatorTok{-}\DecValTok{1960}
+\NormalTok{BJsales                 Sales Data with Leading Indicator}
+\NormalTok{BOD                     Biochemical Oxygen Demand}
+\NormalTok{CO2                     Carbon Dioxide Uptake }\ControlFlowTok{in}\NormalTok{ Grass Plants}
+\NormalTok{ChickWeight             Weight versus age of chicks on different diets}
+\NormalTok{DNase                   Elisa assay of DNase}
+\NormalTok{Formaldehyde            Determination of Formaldehyde}
+\NormalTok{HairEyeColor            Hair and Eye Color of Statistics Students}
+\NormalTok{Harman23.cor            Harman Example }\FloatTok{2.3}
+\NormalTok{Harman74.cor            Harman Example }\FloatTok{7.4}
+\NormalTok{Indometh                Pharmacokinetics of Indomethacin}
+\NormalTok{InsectSprays            Effectiveness of Insect Sprays}
+\NormalTok{JohnsonJohnson          Quarterly Earnings per Johnson }\OperatorTok{&}\StringTok{ }\NormalTok{Johnson Share}
+\NormalTok{LakeHuron               Level of Lake Huron }\DecValTok{1875}\OperatorTok{-}\DecValTok{1972}
+\NormalTok{LifeCycleSavings        Intercountry Life}\OperatorTok{-}\NormalTok{Cycle Savings Data}
+\NormalTok{Loblolly                Growth of Loblolly pine trees}
+\NormalTok{Nile                    Flow of the River Nile}
+\NormalTok{Orange                  Growth of Orange Trees}
+\NormalTok{OrchardSprays           Potency of Orchard Sprays}
+\NormalTok{PlantGrowth             Results from an Experiment on Plant Growth}
+\NormalTok{Puromycin               Reaction Velocity of an Enzymatic Reaction}
+\NormalTok{Theoph                  Pharmacokinetics of Theophylline}
+\end{Highlighting}
+\end{Shaded}
+
 \section{A Reference Data Frame}\label{a-reference-data-frame}
 
 We will use a well-known data frame, at least in R circles, called
@@ -207,43 +239,13 @@ What you will discover is that the \textbf{dplyr} package, which is part
 of the much larger \textbf{tidyverse} package set, extends upon the idea
 of the basic R data frame in a way that some feel is superior. It
 depends on your point of view though the \textbf{tidyverse} has a lot of
-consistency in it which makes it \textbf{very} useful. However you will
-inevitably encounter older R code which does not use it. This is why you
-have to have some basic understanding of the basic data frame concept.
+consistency in it which makes it \textbf{very} useful. While you could
+start exclusively with \textbf{dplyr} and the \textbf{tidyverse} the
+world is still full of older code. Plus, many of the advantages of
+\textbf{dplyr} only become quite apparent when compared to the ``older
+way'' of doing things.
 
-\chapter{Data Frame Details}\label{data-frame-details}
-
-R comes with with a variety of built-in data sets that are very useful
-for getting used to data sets and how to manipulate them.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{AirPassengers           Monthly Airline Passenger Numbers }\DecValTok{1949}\OperatorTok{-}\DecValTok{1960}
-\NormalTok{BJsales                 Sales Data with Leading Indicator}
-\NormalTok{BOD                     Biochemical Oxygen Demand}
-\NormalTok{CO2                     Carbon Dioxide Uptake }\ControlFlowTok{in}\NormalTok{ Grass Plants}
-\NormalTok{ChickWeight             Weight versus age of chicks on different diets}
-\NormalTok{DNase                   Elisa assay of DNase}
-\NormalTok{Formaldehyde            Determination of Formaldehyde}
-\NormalTok{HairEyeColor            Hair and Eye Color of Statistics Students}
-\NormalTok{Harman23.cor            Harman Example }\FloatTok{2.3}
-\NormalTok{Harman74.cor            Harman Example }\FloatTok{7.4}
-\NormalTok{Indometh                Pharmacokinetics of Indomethacin}
-\NormalTok{InsectSprays            Effectiveness of Insect Sprays}
-\NormalTok{JohnsonJohnson          Quarterly Earnings per Johnson }\OperatorTok{&}\StringTok{ }\NormalTok{Johnson Share}
-\NormalTok{LakeHuron               Level of Lake Huron }\DecValTok{1875}\OperatorTok{-}\DecValTok{1972}
-\NormalTok{LifeCycleSavings        Intercountry Life}\OperatorTok{-}\NormalTok{Cycle Savings Data}
-\NormalTok{Loblolly                Growth of Loblolly pine trees}
-\NormalTok{Nile                    Flow of the River Nile}
-\NormalTok{Orange                  Growth of Orange Trees}
-\NormalTok{OrchardSprays           Potency of Orchard Sprays}
-\NormalTok{PlantGrowth             Results from an Experiment on Plant Growth}
-\NormalTok{Puromycin               Reaction Velocity of an Enzymatic Reaction}
-\NormalTok{Theoph                  Pharmacokinetics of Theophylline}
-\end{Highlighting}
-\end{Shaded}
-
-\section{An Example}\label{an-example}
+\chapter{An Example}\label{an-example}
 
 Data frames look like an Excel Spreadsheet. The rows are observations
 and the columns are variables or ``features'' that represent some
@@ -1038,6 +1040,29 @@ dataframe accordingly:
 ## Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  Man    5    2
 ## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  Man    4    1
 ## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  Man    4    1
+\end{verbatim}
+
+To invert the sense of the order use the \textbf{rev} function. We'll
+also use the head function to list only the first 5 rows of the result.
+Note that in base R, using composite functions is welcomed although you
+will find out that this is not a value in the tidyverse. For math
+people, using a composite function is natural which, in large part, is
+why R embraced that approach early on.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(mtcars[}\KeywordTok{rev}\NormalTok{(}\KeywordTok{order}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{mpg)),])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                 mpg cyl  disp  hp drat    wt  qsec vs  am gear carb
+## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1 Man    4    1
+## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1 Man    4    1
+## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1 Man    5    2
+## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1 Man    4    2
+## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1 Man    4    1
+## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0 Man    5    2
 \end{verbatim}
 
 \chapter{Literature}\label{literature}
