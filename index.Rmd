@@ -15,7 +15,63 @@ biblio-style: apalike
 
 # R Data Structures
 
-There are a number of data structures in R such as **vectors, lists, matricies** and **arrays** but the the premier data structure in R is known as the **data.frame**. This structure can be described as follows:
+There are a number of data structures in R such as **vectors, lists** qnd **matrices**. The **vector** structure winds up being helpful in understanding how to work with data frames. 
+
+## Vectors
+
+It is a container for a series of related data of the same type: height measurements of students, whether a group of people smoke or not, their blood pressure. The only rule here is that a vector can contain only one data type at a time.
+
+
+```{r}
+names  <- c("P1","P2","P3","P4","P5")
+temp   <- c(98.2,101.3,97.2,100.2,98.5)
+pulse  <- c(66,72,83,85,90)
+gender <- c("M","F","M","M","F")
+```
+
+To access elements, or ranges of elements, within a vector involves using the "bracket" notation:
+
+```{r}
+# Get the first element of temp
+temp[1]
+
+# Get elements 3,4, and 5 from pulse
+pulse[3:5]
+```
+
+We can also use logical expressions to find elements that satisfy some condition. This is a very powerful capability in R. 
+
+```{r}
+temp < 98
+```
+
+Whoa. What was that ? Well we get back a T/F logical vector that tells us what elements satisfy the specified condition. We can then use this info to get the elements of interest.
+
+```{r}
+temp[temp < 98]
+```
+
+Working with individual vectors is fine but a more general way of working with them is in data frames which provides more fleibility:
+
+```{r}
+(my_df <- data.frame(names,temp,pulse,gender)) 
+```
+
+Looking at each column, we see that they are the vectors we were just working with. If we need to access them from the data frame it's easy.
+
+```{r}
+# Get the temp column
+my_df$temp
+
+# What's the mean of the temp column
+mean(my_df$temp)
+```
+
+## Data Frames
+
+![](./figures/dframe.png){width=300}
+
+But we are getting ahead of ourselves. Just know that the **premier data structure** in R is the **data.frame**. This structure can be described as follows:
 
   - A data frame is a special type of list that contains data in a format that allows for easier manipulation, reshaping, and open-ended analysis
   
@@ -27,9 +83,7 @@ There are a number of data structures in R such as **vectors, lists, matricies**
   
 Once you become accustomed to working with data frames, R becomes so much easier to use. In fact, it could be well argued tht UNTIL you wrap your head around the data frame concept then you cannot be productive in R. This is mostly true, in my experience. 
 
-## The Mighty Data Frame 
 
-![](./figures/dframe.png){width=300}
 
 R comes with with a variety of built-in data sets that are very useful for getting used to data sets and how to manipulate them.
 

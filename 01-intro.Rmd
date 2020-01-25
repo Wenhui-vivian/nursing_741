@@ -256,7 +256,7 @@ To invert the sense of the order use the **rev** function. We'll also use the he
 head(mtcars[rev(order(mtcars$mpg)),])
 ```
 
-## Creating Data Frames From CSV Files
+## Reading CSV Files
 
 Many times data will be read in from a comma delimited file exported from Excel. These are known as Comma Separated Value files - generally abbreviated as **CSV**. The file can be read from a local drive or even from the Web as long as you know the URL associated with the file. In this example, there is a file on the Internet relating to some testing data involving students and various subjects. 
 
