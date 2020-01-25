@@ -15,8 +15,6 @@ biblio-style: apalike
 
 # R Data Structures
 
-![](./figures/dframe.png){width=300}
-
 There are a number of data structures in R such as **vectors, lists, matricies** and **arrays** but the the premier data structure in R is known as the **data.frame**. This structure can be described as follows:
 
   - A data frame is a special type of list that contains data in a format that allows for easier manipulation, reshaping, and open-ended analysis
@@ -29,7 +27,9 @@ There are a number of data structures in R such as **vectors, lists, matricies**
   
 Once you become accustomed to working with data frames, R becomes so much easier to use. In fact, it could be well argued tht UNTIL you wrap your head around the data frame concept then you cannot be productive in R. This is mostly true, in my experience. 
 
-# Data Frame Details
+## The Mighty Data Frame 
+
+![](./figures/dframe.png){width=300}
 
 R comes with with a variety of built-in data sets that are very useful for getting used to data sets and how to manipulate them.
 
@@ -61,7 +61,7 @@ Theoph                  Pharmacokinetics of Theophylline
 
 ## A Reference Data Frame
 
-We will use a well-known data frame, at least in R circles, called **mtcars** which is part of any default installation of R. It is a simple data set relating to, well, automobiles. 
+We will use a well-known data frame, at least in R circles, called **mtcars** which is part of any default installation of R. It is a simple data set relating to, well, automobiles. This data frame has the distinction of being the most (ab)used data frame in R education. 
 
 ```{r eval=FALSE}
 The data was extracted from the 1974 Motor Trend US 
@@ -86,10 +86,13 @@ variables.
 ```
 
 
-
 ## Relation to dplyr
 
-What you will discover is that the **dplyr** package, which is part of the much larger **tidyverse** package set, extends upon the idea of the basic R data frame in a way that some feel is superior. It depends on your point of view though the **tidyverse** has a lot of consistency in it which makes it **very** useful. While you could start exclusively with **dplyr** and the **tidyverse** the world is still full of older code. Plus, many of the advantages of **dplyr** only become quite apparent when compared to the "older way" of doing things.  
+What you will discover is that the **dplyr** package, which itself is part of the much larger **tidyverse** package set , extends upon the idea of the basic R data frame in a way that some feel is superior. It depends on your point of view though the **tidyverse** has a lot of what I call a philosophic consistency in it which makes it **very** useful once you get some concepts in mind.
+
+While you could start exclusively with **dplyr** and the **tidyverse** the world is still full of older code. Plus, many of the advantages of **dplyr** only become quite apparent when compared to the "older way" of doing things.  So my recommendation is to know how to deal with data frames in base R while also spending time to learn the **dplyr** way of doing things.
+
+
 
 
 

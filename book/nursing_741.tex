@@ -137,12 +137,6 @@
 }
 \chapter{R Data Structures}\label{r-data-structures}
 
-\begin{figure}
-\centering
-\includegraphics[width=3.12500in]{./figures/dframe.png}
-\caption{}
-\end{figure}
-
 There are a number of data structures in R such as \textbf{vectors,
 lists, matricies} and \textbf{arrays} but the the premier data structure
 in R is known as the \textbf{data.frame}. This structure can be
@@ -171,7 +165,13 @@ much easier to use. In fact, it could be well argued tht UNTIL you wrap
 your head around the data frame concept then you cannot be productive in
 R. This is mostly true, in my experience.
 
-\chapter{Data Frame Details}\label{data-frame-details}
+\section{The Mighty Data Frame}\label{the-mighty-data-frame}
+
+\begin{figure}
+\centering
+\includegraphics[width=3.12500in]{./figures/dframe.png}
+\caption{}
+\end{figure}
 
 R comes with with a variety of built-in data sets that are very useful
 for getting used to data sets and how to manipulate them.
@@ -207,7 +207,8 @@ for getting used to data sets and how to manipulate them.
 
 We will use a well-known data frame, at least in R circles, called
 \textbf{mtcars} which is part of any default installation of R. It is a
-simple data set relating to, well, automobiles.
+simple data set relating to, well, automobiles. This data frame has the
+distinction of being the most (ab)used data frame in R education.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -235,15 +236,19 @@ simple data set relating to, well, automobiles.
 
 \section{Relation to dplyr}\label{relation-to-dplyr}
 
-What you will discover is that the \textbf{dplyr} package, which is part
-of the much larger \textbf{tidyverse} package set, extends upon the idea
-of the basic R data frame in a way that some feel is superior. It
-depends on your point of view though the \textbf{tidyverse} has a lot of
-consistency in it which makes it \textbf{very} useful. While you could
-start exclusively with \textbf{dplyr} and the \textbf{tidyverse} the
-world is still full of older code. Plus, many of the advantages of
-\textbf{dplyr} only become quite apparent when compared to the ``older
-way'' of doing things.
+What you will discover is that the \textbf{dplyr} package, which itself
+is part of the much larger \textbf{tidyverse} package set , extends upon
+the idea of the basic R data frame in a way that some feel is superior.
+It depends on your point of view though the \textbf{tidyverse} has a lot
+of what I call a philosophic consistency in it which makes it
+\textbf{very} useful once you get some concepts in mind.
+
+While you could start exclusively with \textbf{dplyr} and the
+\textbf{tidyverse} the world is still full of older code. Plus, many of
+the advantages of \textbf{dplyr} only become quite apparent when
+compared to the ``older way'' of doing things. So my recommendation is
+to know how to deal with data frames in base R while also spending time
+to learn the \textbf{dplyr} way of doing things.
 
 \chapter{An Example}\label{an-example}
 
@@ -1072,18 +1077,6 @@ Here is a review of existing methods.
 \chapter{Methods}\label{methods}
 
 We describe our methods in this chapter.
-
-\chapter{Applications}\label{applications}
-
-Some \emph{significant} applications are demonstrated in this chapter.
-
-\section{Example one}\label{example-one}
-
-\section{Example two}\label{example-two}
-
-\chapter{Final Words}\label{final-words}
-
-We have finished a nice book.
 
 \bibliography{book.bib,packages.bib}
 
