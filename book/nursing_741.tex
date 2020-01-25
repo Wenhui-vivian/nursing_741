@@ -124,7 +124,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2020-01-24}
+    \date{2020-01-25}
 
 \usepackage{booktabs}
 
@@ -1700,10 +1700,222 @@ Let's group by gender and then compute the total number of observations in each 
 ## 2 MALE       70     3
 \end{verbatim}
 
-\hypertarget{methods}{%
-\chapter{Methods}\label{methods}}
+\hypertarget{split-apply-combine}{%
+\chapter{Split Apply Combine}\label{split-apply-combine}}
 
-some methods
+This pattern of using \textbf{group\_by()} followed by \textbf{summarize()}
+is called \textbf{Split Apply Combine}. The idea is that we
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Split up the data frame by gender group
+\item
+  Then for each group, apply the average function
+\item
+  Then combine the average results with each group
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{group_by}\NormalTok{(df,gender)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 3
+## # Groups:   gender [2]
+##      id gender   age
+##   <int> <fct>  <dbl>
+## 1     1 MALE      70
+## 2     2 MALE      76
+## 3     3 FEMALE    60
+## 4     4 MALE      64
+## 5     5 FEMALE    68
+\end{verbatim}
+
+\includegraphics[width=6.25in,height=\textheight]{./figures/morpheus.png}
+
+\hypertarget{what-are-pipes}{%
+\section{What Are Pipes ?}\label{what-are-pipes}}
+
+Before moving forward let us consider the ``pipe'' operator that is included with the dplyr - well actually \textbf{magrittr} package. This is used to make it possible to ``pipe'' the results of one command into another command and so on.
+
+The inspiration for this comes from the UNIX/LINUX operating system where pipes are used all the time. So in effect using ``pipes'' is nothing new in the world of research computation. \textbf{Warning:} Once you get used to pipes it is hard to go back to not using them.
+
+Let's use the mtcars data frame to illustrate the basics of the piping mechanism as used by dplyr. Here we will select the \textbf{mpg} and \textbf{am} column from mtcars and view the top 5 rows.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(}\KeywordTok{select}\NormalTok{(mtcars, mpg, am))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                    mpg   am
+## Mazda RX4         21.0  Man
+## Mazda RX4 Wag     21.0  Man
+## Datsun 710        22.8  Man
+## Hornet 4 Drive    21.4 Auto
+## Hornet Sportabout 18.7 Auto
+## Valiant           18.1 Auto
+\end{verbatim}
+
+Okay, how would we do this using pipes ? Whoa !
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mtcars }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(mpg, am) }\OperatorTok{%>%}\StringTok{ }\NormalTok{head}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                    mpg   am
+## Mazda RX4         21.0  Man
+## Mazda RX4 Wag     21.0  Man
+## Datsun 710        22.8  Man
+## Hornet 4 Drive    21.4 Auto
+## Hornet Sportabout 18.7 Auto
+## Valiant           18.1 Auto
+\end{verbatim}
+
+Break this down:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mtcars }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(mpg, am)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                      mpg   am
+## Mazda RX4           21.0  Man
+## Mazda RX4 Wag       21.0  Man
+## Datsun 710          22.8  Man
+## Hornet 4 Drive      21.4 Auto
+## Hornet Sportabout   18.7 Auto
+## Valiant             18.1 Auto
+## Duster 360          14.3 Auto
+## Merc 240D           24.4 Auto
+## Merc 230            22.8 Auto
+## Merc 280            19.2 Auto
+## Merc 280C           17.8 Auto
+## Merc 450SE          16.4 Auto
+## Merc 450SL          17.3 Auto
+## Merc 450SLC         15.2 Auto
+## Cadillac Fleetwood  10.4 Auto
+## Lincoln Continental 10.4 Auto
+## Chrysler Imperial   14.7 Auto
+## Fiat 128            32.4  Man
+## Honda Civic         30.4  Man
+## Toyota Corolla      33.9  Man
+## Toyota Corona       21.5 Auto
+## Dodge Challenger    15.5 Auto
+## AMC Javelin         15.2 Auto
+## Camaro Z28          13.3 Auto
+## Pontiac Firebird    19.2 Auto
+## Fiat X1-9           27.3  Man
+## Porsche 914-2       26.0  Man
+## Lotus Europa        30.4  Man
+## Ford Pantera L      15.8  Man
+## Ferrari Dino        19.7  Man
+## Maserati Bora       15.0  Man
+## Volvo 142E          21.4  Man
+\end{verbatim}
+
+The key to understanding how this works is to \textbf{read} this from left to right. Let's use our new found knowledge to reimagine our use of the \textbf{group\_by} and \textbf{summarize} functions.
+
+\hypertarget{pipes-and-split-apply-combine}{%
+\section{Pipes and Split Apply Combine}\label{pipes-and-split-apply-combine}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(gender) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{avg=}\KeywordTok{mean}\NormalTok{(age))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   gender   avg
+##   <fct>  <dbl>
+## 1 FEMALE    64
+## 2 MALE      70
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Same as this but the pipes are far more elegant}
+
+\KeywordTok{summarize}\NormalTok{(}\KeywordTok{group_by}\NormalTok{(df,gender), }\DataTypeTok{avg=}\KeywordTok{mean}\NormalTok{(age))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   gender   avg
+##   <fct>  <dbl>
+## 1 FEMALE    64
+## 2 MALE      70
+\end{verbatim}
+
+This approach allows us to build a ``pipeline'' containing commands. We don't have to commit to a specific sequence. This enables a free-form type of exploration.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(gender) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{avg=}\KeywordTok{mean}\NormalTok{(age),}\DataTypeTok{total=}\KeywordTok{n}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   gender   avg total
+##   <fct>  <dbl> <int>
+## 1 FEMALE    64     2
+## 2 MALE      70     3
+\end{verbatim}
+
+What is the median age of all males ?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(gender }\OperatorTok{==}\StringTok{ "MALE"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{med_age=}\KeywordTok{median}\NormalTok{(age))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   med_age
+## 1      70
+\end{verbatim}
+
+\includegraphics{./figures/chrt.png}
+
+Using the built in mtcars dataframe, \textbf{filter} for records where the wt is greater than 3.3 tons.
+
+Then, using the \textbf{mutate} function, create a column called ab\_be (Y or N) that indicates whether that observation's mpg is greater (or not) than the average mpg for the filtered set.
+
+Then present the average mpg for each group. This is easy using pipes and dplyr verbs
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mtcars }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(wt }\OperatorTok{>}\StringTok{ }\FloatTok{3.3}\NormalTok{)  }\OperatorTok{%>%}
+\StringTok{          }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ab_be=}\KeywordTok{ifelse}\NormalTok{(mpg }\OperatorTok{>}\StringTok{ }\KeywordTok{mean}\NormalTok{(mpg),}\StringTok{"Y"}\NormalTok{,}\StringTok{"N"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{          }\KeywordTok{group_by}\NormalTok{(ab_be) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{          }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean_mpg=}\KeywordTok{mean}\NormalTok{(mpg))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   ab_be mean_mpg
+##   <chr>    <dbl>
+## 1 N         13.8
+## 2 Y         18.1
+\end{verbatim}
 
 \bibliography{book.bib,packages.bib}
 

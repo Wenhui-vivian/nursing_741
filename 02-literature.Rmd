@@ -249,3 +249,87 @@ Let's group by gender and then compute the total number of observations in each 
 summarize(group_by(df,gender),av_age=mean(age),total=n())
 ```
 
+# Split Apply Combine
+
+This pattern of using **group_by()** followed by **summarize()** 
+is called **Split Apply Combine**. The idea is that we 
+
+1) Split up the data frame by gender group
+2) Then for each group, apply the average function
+3) Then combine the average results with each group
+
+```{r}
+group_by(df,gender)
+```
+
+![](./figures/morpheus.png){width=600}
+
+
+## What Are Pipes ?
+
+Before moving forward let us consider the "pipe" operator that is included with the dplyr - well actually **magrittr** package. This is used to make it possible to "pipe" the results of one command into another command and so on.
+
+The inspiration for this comes from the UNIX/LINUX operating system where pipes are used all the time. So in effect using "pipes" is nothing new in the world of research computation. **Warning:** Once you get used to pipes it is hard to go back to not using them. 
+
+Let’s use the mtcars data frame to illustrate the basics of the piping mechanism as used by dplyr. Here we will select the **mpg** and **am** column from mtcars and view the top 5 rows.
+
+```{r}
+head(select(mtcars, mpg, am))
+```
+
+Okay, how would we do this using pipes ? Whoa !
+
+```{r}
+mtcars %>% select(mpg, am) %>% head
+```
+
+Break this down:
+
+```{r}
+mtcars %>% select(mpg, am)
+```
+
+The key to understanding how this works is to **read** this from left to right. Let's use our new found knowledge to reimagine our use of the **group_by** and **summarize** functions. 
+
+## Pipes and Split Apply Combine
+
+```{r}
+df %>% group_by(gender) %>% summarize(avg=mean(age))
+
+# Same as this but the pipes are far more elegant
+
+summarize(group_by(df,gender), avg=mean(age))
+```
+
+This approach allows us to build a "pipeline" containing commands. We don't have to commit to a specific sequence. This enables a free-form type of exploration.
+
+```{r}
+df %>% 
+  group_by(gender) %>% 
+  summarize(avg=mean(age),total=n())
+```
+
+What is the median age of all males ? 
+
+```{r}
+df %>% 
+  filter(gender == "MALE") %>% 
+  summarize(med_age=median(age))
+```
+
+![](./figures/chrt.png)
+
+
+Using the built in mtcars dataframe, **filter** for records where the wt is greater than 3.3 tons.
+
+Then, using the **mutate** function, create a column called ab_be (Y or N) that indicates whether that observation’s mpg is greater (or not) than the average mpg for the filtered set.
+
+Then present the average mpg for each group. This is easy using pipes and dplyr verbs
+
+```{r}
+mtcars %>% filter(wt > 3.3)  %>%
+          mutate(ab_be=ifelse(mpg > mean(mpg),"Y","N")) %>%
+          group_by(ab_be) %>% 
+          summarize(mean_mpg=mean(mpg))
+```
+
