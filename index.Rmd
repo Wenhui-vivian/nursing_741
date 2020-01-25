@@ -9,6 +9,7 @@ description: An Intro to data manipulation with dplyr
 documentclass: book
 link-citations: yes
 site: bookdown::bookdown_site
+output: bookdown::gitbook
 biblio-style: apalike
 ---
 
