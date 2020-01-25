@@ -1714,25 +1714,21 @@ is called \textbf{Split Apply Combine}. The idea is that we
 \item
   Then for each group, apply the average function
 \item
-  Then combine the average results with each group
+  Then combine the average results for each group
 \end{enumerate}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{group_by}\NormalTok{(df,gender)}
+\KeywordTok{summarize}\NormalTok{(}\KeywordTok{group_by}\NormalTok{(df,gender),}\DataTypeTok{av_age=}\KeywordTok{mean}\NormalTok{(age))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 5 x 3
-## # Groups:   gender [2]
-##      id gender   age
-##   <int> <fct>  <dbl>
-## 1     1 MALE      70
-## 2     2 MALE      76
-## 3     3 FEMALE    60
-## 4     4 MALE      64
-## 5     5 FEMALE    68
+## # A tibble: 2 x 2
+##   gender av_age
+##   <fct>   <dbl>
+## 1 FEMALE     64
+## 2 MALE       70
 \end{verbatim}
 
 \includegraphics[width=6.25in,height=\textheight]{./figures/morpheus.png}
@@ -1742,7 +1738,11 @@ is called \textbf{Split Apply Combine}. The idea is that we
 
 Before moving forward let us consider the ``pipe'' operator that is included with the dplyr - well actually \textbf{magrittr} package. This is used to make it possible to ``pipe'' the results of one command into another command and so on.
 
-The inspiration for this comes from the UNIX/LINUX operating system where pipes are used all the time. So in effect using ``pipes'' is nothing new in the world of research computation. \textbf{Warning:} Once you get used to pipes it is hard to go back to not using them.
+The inspiration for this comes from the UNIX/LINUX operating system where pipes are used all the time. So in effect using ``pipes'' is nothing new in the world of research computation.
+
+\includegraphics{./figures/unix_pipe.png}
+
+\textbf{Warning:} Once you get used to pipes it is hard to go back to not using them.
 
 Let's use the mtcars data frame to illustrate the basics of the piping mechanism as used by dplyr. Here we will select the \textbf{mpg} and \textbf{am} column from mtcars and view the top 5 rows.
 
@@ -1762,7 +1762,11 @@ Let's use the mtcars data frame to illustrate the basics of the piping mechanism
 ## Valiant           18.1 Auto
 \end{verbatim}
 
-Okay, how would we do this using pipes ? Whoa !
+Okay, how would we do this using pipes ? Whoa ! Note that each command is ``it's own thing'' independently of the pipe character.
+So the:
+- output of mtcars goes into the
+- input of the \textbf{select} function whose output goes into the
+- input of the \textbf{head} function
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1824,10 +1828,18 @@ Break this down:
 ## Volvo 142E          21.4  Man
 \end{verbatim}
 
-The key to understanding how this works is to \textbf{read} this from left to right. Let's use our new found knowledge to reimagine our use of the \textbf{group\_by} and \textbf{summarize} functions.
+The key to understanding how this works is to \textbf{read} this from left to right. It bears repeating that each command is ``it's own thing'' independently of the pipe character. So the:
 
-\hypertarget{pipes-and-split-apply-combine}{%
-\section{Pipes and Split Apply Combine}\label{pipes-and-split-apply-combine}}
+\begin{verbatim}
+- output of mtcars goes into the 
+- input of the **select** function whose output goes into the
+- input of the **head** function
+\end{verbatim}
+
+Let's use our new found knowledge to re-imagine our use of the \textbf{group\_by} and \textbf{summarize} functions that we have been using in \textbf{composite} form up unitl now.
+
+\hypertarget{using-pipes-to-do-split-apply-combine}{%
+\section{Using Pipes To Do Split-Apply-Combine}\label{using-pipes-to-do-split-apply-combine}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1845,7 +1857,8 @@ The key to understanding how this works is to \textbf{read} this from left to ri
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Same as this but the pipes are far more elegant}
+\CommentTok{# Same as the following but the pipes don't require you to "commit"}
+\CommentTok{# With the following, you have to know in advance what you want to do}
 
 \KeywordTok{summarize}\NormalTok{(}\KeywordTok{group_by}\NormalTok{(df,gender), }\DataTypeTok{avg=}\KeywordTok{mean}\NormalTok{(age))}
 \end{Highlighting}
@@ -1859,7 +1872,7 @@ The key to understanding how this works is to \textbf{read} this from left to ri
 ## 2 MALE      70
 \end{verbatim}
 
-This approach allows us to build a ``pipeline'' containing commands. We don't have to commit to a specific sequence. This enables a free-form type of exploration.
+This approach allows us to build a ``pipeline'' containing commands. We don't have to commit to a specific sequence of functions. This enables a free-form type of exploration.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1894,18 +1907,44 @@ What is the median age of all males ?
 
 \includegraphics{./figures/chrt.png}
 
-Using the built in mtcars dataframe, \textbf{filter} for records where the wt is greater than 3.3 tons.
+\hypertarget{saving-results}{%
+\subsection{Saving Results}\label{saving-results}}
 
-Then, using the \textbf{mutate} function, create a column called ab\_be (Y or N) that indicates whether that observation's mpg is greater (or not) than the average mpg for the filtered set.
+It should be observed that if you want to save the results of some sequence of commands that you will need to use the ``\textless{}-'' operator. Using the previous example we could the following to save our result.
 
-Then present the average mpg for each group. This is easy using pipes and dplyr verbs
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{results <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{filter}\NormalTok{(gender }\OperatorTok{==}\StringTok{ "MALE"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{med_age=}\KeywordTok{median}\NormalTok{(age))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{an-example}{%
+\section{An Example}\label{an-example}}
+
+Using the built in mtcars dataframe, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  \textbf{filter} for records where the wt is greater than 3.3 tons.
+\item
+  Then, using the \textbf{mutate} function to create a column called
+  ab\_be (Y or N) that indicates whether that observation's
+  mpg is greater (or not) than the average mpg for the filtered set.
+\item
+  Then present the average mpg for each group.
+\end{enumerate}
+
+This is easy using pipes and dplyr verbs.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{mtcars }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(wt }\OperatorTok{>}\StringTok{ }\FloatTok{3.3}\NormalTok{)  }\OperatorTok{%>%}
-\StringTok{          }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ab_be=}\KeywordTok{ifelse}\NormalTok{(mpg }\OperatorTok{>}\StringTok{ }\KeywordTok{mean}\NormalTok{(mpg),}\StringTok{"Y"}\NormalTok{,}\StringTok{"N"}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{          }\KeywordTok{group_by}\NormalTok{(ab_be) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{          }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean_mpg=}\KeywordTok{mean}\NormalTok{(mpg))}
+\StringTok{           }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ab_be=}\KeywordTok{ifelse}\NormalTok{(mpg }\OperatorTok{>}\StringTok{ }\KeywordTok{mean}\NormalTok{(mpg),}\StringTok{"Y"}\NormalTok{,}\StringTok{"N"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{           }\KeywordTok{group_by}\NormalTok{(ab_be) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{           }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean_mpg=}\KeywordTok{mean}\NormalTok{(mpg))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1915,6 +1954,539 @@ Then present the average mpg for each group. This is easy using pipes and dplyr 
 ##   <chr>    <dbl>
 ## 1 N         13.8
 ## 2 Y         18.1
+\end{verbatim}
+
+This could be then ``piped'' into the input of the \textbf{ggplot} command to plot a corresponding bar chart. If you don't yet know ggplot then it's okay as this will nudge you in that direction. Both \textbf{ggplot} and \textbf{dplyr} are part of the \textbf{tidyverse} which means that the two packages ``talk'' to each other well.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mtcars }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(wt }\OperatorTok{>}\StringTok{ }\FloatTok{3.3}\NormalTok{)  }\OperatorTok{%>%}
+\StringTok{           }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ab_be=}\KeywordTok{ifelse}\NormalTok{(mpg }\OperatorTok{>}\StringTok{ }\KeywordTok{mean}\NormalTok{(mpg),}\StringTok{"Y"}\NormalTok{,}\StringTok{"N"}\NormalTok{)  ) }\OperatorTok{%>%}
+\StringTok{           }\KeywordTok{group_by}\NormalTok{(ab_be) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean_mpg=}\KeywordTok{mean}\NormalTok{(mpg)) }\OperatorTok{%>%}
+\StringTok{           }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{ab_be,}\DataTypeTok{y=}\NormalTok{mean_mpg)) }\OperatorTok{+}
+\StringTok{           }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{           }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Mean MPG"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"ab_be"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Mean MPG"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{nursing_741_files/figure-latex/unnamed-chunk-80-1.pdf}
+
+\hypertarget{working-with-flowers}{%
+\section{Working With Flowers}\label{working-with-flowers}}
+
+Let's work with the built in \textbf{iris} data frame to explore the world of flowers. This is famous (Fisher's or Anderson's) \textbf{iris} data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.
+
+I'll use dyplr idioms here as opposed to the typical Base R approach which might involve use of composite functions. First, load up the iris data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(iris)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{structure-of-the-data-frame}{%
+\subsection{Structure of The Data frame}\label{structure-of-the-data-frame}}
+
+It's always helpful to look at what types of data you have in a data frame. As you already known, base R has a function called \textbf{str} which is useful. The tidyverse equivalent is \textbf{glimpse} although the two commands basically provide the same types of information. Personally, I still prefer the ``old'' \textbf{str} function if only because I've been using it for so long.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(iris)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{glimpse}\NormalTok{(iris)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Observations: 150
+## Variables: 5
+## $ Sepal.Length <dbl> 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9,...
+## $ Sepal.Width  <dbl> 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1,...
+## $ Petal.Length <dbl> 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5,...
+## $ Petal.Width  <dbl> 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1,...
+## $ Species      <fct> setosa, setosa, setosa, setosa, setosa, setosa, s...
+\end{verbatim}
+
+\hypertarget{more-practice}{%
+\subsection{More Practice}\label{more-practice}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Get all the rows where the Species is ``setosa'' Sepal.Length is \textgreater{} 4.7
+  but \textless{} 5.0. Use the pipes feature to help you with this.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Sepal.Length }\OperatorTok{>}\StringTok{ }\FloatTok{4.7} \OperatorTok{&}\StringTok{ }\NormalTok{Sepal.Length }\OperatorTok{<}\StringTok{ }\FloatTok{5.0} \OperatorTok{&}\StringTok{ }\NormalTok{Species}\OperatorTok{==}\StringTok{"setosa"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          4.9         3.0          1.4         0.2  setosa
+## 2          4.9         3.1          1.5         0.1  setosa
+## 3          4.8         3.4          1.6         0.2  setosa
+## 4          4.8         3.0          1.4         0.1  setosa
+## 5          4.8         3.4          1.9         0.2  setosa
+## 6          4.8         3.1          1.6         0.2  setosa
+## 7          4.9         3.1          1.5         0.2  setosa
+## 8          4.9         3.6          1.4         0.1  setosa
+## 9          4.8         3.0          1.4         0.3  setosa
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Select out only the columns relating Sepal measurements. List only the top five rows:
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\KeywordTok{c}\NormalTok{(Sepal.Length,Sepal.Width)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Length Sepal.Width
+## 1          5.1         3.5
+## 2          4.9         3.0
+## 3          4.7         3.2
+## 4          4.6         3.1
+## 5          5.0         3.6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Or use a helper function to process strings}
+
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"Sepal"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Length Sepal.Width
+## 1          5.1         3.5
+## 2          4.9         3.0
+## 3          4.7         3.2
+## 4          4.6         3.1
+## 5          5.0         3.6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Or if you know which column numbers you want}
+
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Length Sepal.Width
+## 1          5.1         3.5
+## 2          4.9         3.0
+## 3          4.7         3.2
+## 4          4.6         3.1
+## 5          5.0         3.6
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Sort the data frame by Sepal.Width such that the row with the largest Sepal.Width is listed first. Print only the first 5 rows
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(Sepal.Width)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.7         4.4          1.5         0.4  setosa
+## 2          5.5         4.2          1.4         0.2  setosa
+## 3          5.2         4.1          1.5         0.1  setosa
+## 4          5.8         4.0          1.2         0.2  setosa
+## 5          5.4         3.9          1.7         0.4  setosa
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  How many observations are there for each Species group ?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(Species) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 2
+## # Groups:   Species [3]
+##   Species        n
+##   <fct>      <int>
+## 1 setosa        50
+## 2 versicolor    50
+## 3 virginica     50
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Or}
+
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(Species) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{total=}\KeywordTok{n}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 2
+##   Species    total
+##   <fct>      <int>
+## 1 setosa        50
+## 2 versicolor    50
+## 3 virginica     50
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Select all columns that do NOT relate to Length. Limit output to 5 rows
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{ends_with}\NormalTok{(}\StringTok{"Length"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Width Petal.Width Species
+## 1         3.5         0.2  setosa
+## 2         3.0         0.2  setosa
+## 3         3.2         0.2  setosa
+## 4         3.1         0.2  setosa
+## 5         3.6         0.2  setosa
+## 6         3.9         0.4  setosa
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Select all columns that do NOT relate to Length or Species. Limit output to 5 rows
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\KeywordTok{ends_with}\NormalTok{(}\StringTok{"Length"}\NormalTok{),}\StringTok{"Species"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Width Petal.Width
+## 1         3.5         0.2
+## 2         3.0         0.2
+## 3         3.2         0.2
+## 4         3.1         0.2
+## 5         3.6         0.2
+## 6         3.9         0.4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Or}
+
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{ends_with}\NormalTok{(}\StringTok{"Length"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\StringTok{"Species"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{head}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Width Petal.Width
+## 1         3.5         0.2
+## 2         3.0         0.2
+## 3         3.2         0.2
+## 4         3.1         0.2
+## 5         3.6         0.2
+## 6         3.9         0.4
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  Select all columns that do NOT relate to Length or Species. But only for observations where Sepal.Width is \textgreater{} 3.9. There are multiples way to attack this problem.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(Sepal.Width }\OperatorTok{>}\StringTok{ }\FloatTok{3.9}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{ends_with}\NormalTok{(}\StringTok{"Length"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\StringTok{"Species"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Width Petal.Width
+## 1         4.0         0.2
+## 2         4.4         0.4
+## 3         4.1         0.1
+## 4         4.2         0.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Or}
+
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\KeywordTok{ends_with}\NormalTok{(}\StringTok{"Length"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\StringTok{"Species"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Sepal.Width }\OperatorTok{>}\StringTok{ }\FloatTok{3.9}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Sepal.Width Petal.Width
+## 1         4.0         0.2
+## 2         4.4         0.4
+## 3         4.1         0.1
+## 4         4.2         0.2
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  Determine the mean, standard deviation, max, and min for Sepal.Length
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean=}\KeywordTok{mean}\NormalTok{(Sepal.Length),}
+                   \DataTypeTok{sd=}\KeywordTok{sd}\NormalTok{(Sepal.Length),}
+                   \DataTypeTok{max=}\KeywordTok{max}\NormalTok{(Sepal.Length),}
+                   \DataTypeTok{min=}\KeywordTok{min}\NormalTok{(Sepal.Length))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       mean        sd max min
+## 1 5.843333 0.8280661 7.9 4.3
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{8}
+\tightlist
+\item
+  For each Species type, determine the mean, standard deviation, max, and min for Sepal.Length
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{iris }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(Species) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean=}\KeywordTok{mean}\NormalTok{(Sepal.Length),}
+                                         \DataTypeTok{sd=}\KeywordTok{sd}\NormalTok{(Sepal.Length),}
+                                         \DataTypeTok{max=}\KeywordTok{max}\NormalTok{(Sepal.Length),}
+                                         \DataTypeTok{min=}\KeywordTok{min}\NormalTok{(Sepal.Length))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 5
+##   Species     mean    sd   max   min
+##   <fct>      <dbl> <dbl> <dbl> <dbl>
+## 1 setosa      5.01 0.352   5.8   4.3
+## 2 versicolor  5.94 0.516   7     4.9
+## 3 virginica   6.59 0.636   7.9   4.9
+\end{verbatim}
+
+\hypertarget{your-turn}{%
+\chapter{Your Turn}\label{your-turn}}
+
+Now it's time for you to try some exercises on your own. The \textbf{ggplot2} package (which is part of the larger \textbf{tidyverse} comes with some data sets one of which is called \textbf{msleep}. It's easy to load into your workspace:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(msleep)}
+\end{Highlighting}
+\end{Shaded}
+
+This data set is
+
+\begin{quote}
+an updated and expanded version of the mammals sleep dataset. Updated sleep times and weights were taken from V. M. Savage and G. B. West. A quantitative, theoretical framework for understanding mammalian sleep. Proceedings of the National Academy of Sciences, 104 (3):1051-1056, 2007
+\end{quote}
+
+\includegraphics[width=6.25in,height=\textheight]{./figures/vore.png}
+
+You can always get the names of the columns in a data frame using \textbf{str} or \textbf{names}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(msleep)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "name"         "genus"        "vore"         "order"       
+##  [5] "conservation" "sleep_total"  "sleep_rem"    "sleep_cycle" 
+##  [9] "awake"        "brainwt"      "bodywt"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#}
+
+\KeywordTok{str}\NormalTok{(msleep)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Classes 'tbl_df', 'tbl' and 'data.frame':    83 obs. of  11 variables:
+##  $ name        : chr  "Cheetah" "Owl monkey" "Mountain beaver" "Greater short-tailed shrew" ...
+##  $ genus       : chr  "Acinonyx" "Aotus" "Aplodontia" "Blarina" ...
+##  $ vore        : chr  "carni" "omni" "herbi" "omni" ...
+##  $ order       : chr  "Carnivora" "Primates" "Rodentia" "Soricomorpha" ...
+##  $ conservation: chr  "lc" NA "nt" "lc" ...
+##  $ sleep_total : num  12.1 17 14.4 14.9 4 14.4 8.7 7 10.1 3 ...
+##  $ sleep_rem   : num  NA 1.8 2.4 2.3 0.7 2.2 1.4 NA 2.9 NA ...
+##  $ sleep_cycle : num  NA NA NA 0.133 0.667 ...
+##  $ awake       : num  11.9 7 9.6 9.1 20 9.6 15.3 17 13.9 21 ...
+##  $ brainwt     : num  NA 0.0155 NA 0.00029 0.423 NA NA NA 0.07 0.0982 ...
+##  $ bodywt      : num  50 0.48 1.35 0.019 600 ...
+\end{verbatim}
+
+Not only is this a new data frame for you it also has the added challenge of containing some missing values - those pesky ``NAs''. In the older approach we used the function \textbf{complete.cases} to help us figure out which rows had at least one missin value. We could still use that here although the \textbf{dplyr} world has a function called \textbf{drop\_na()} which could be used but itself or as part of a pipeline.
+
+Here are some questions I want you to answer. Note that the answers are provided so you can check your work. However, the code used to generate the answer is not visible. There is typically more than one way to answer the question.
+
+\hypertarget{what-is-the-average-total-sleep-time-for-omnivores}{%
+\subsubsection{What is the average total sleep time for Omnivores ?}\label{what-is-the-average-total-sleep-time-for-omnivores}}
+
+\begin{verbatim}
+## # A tibble: 1 x 1
+##    mean
+##   <dbl>
+## 1  10.9
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 1 x 2
+##   vore   mean
+##   <chr> <dbl>
+## 1 omni   10.9
+\end{verbatim}
+
+\hypertarget{group-the-msleep-data-frame-by-taxanomic-order-and-then-summarize-the-mean-sleep-total-for-each-group.-make-sure-the-resulting-table-is-arranged-in-descending-order-of-the-average---from-highest-sleep_total-average-to-the-lowest}{%
+\subsubsection{Group the msleep data frame by taxanomic order and then summarize the mean sleep total for each group. Make sure the resulting table is arranged in descending order of the average - from highest sleep\_total average to the lowest}\label{group-the-msleep-data-frame-by-taxanomic-order-and-then-summarize-the-mean-sleep-total-for-each-group.-make-sure-the-resulting-table-is-arranged-in-descending-order-of-the-average---from-highest-sleep_total-average-to-the-lowest}}
+
+\begin{verbatim}
+## # A tibble: 19 x 2
+##    order             avg
+##    <chr>           <dbl>
+##  1 Chiroptera      19.8 
+##  2 Didelphimorphia 18.7 
+##  3 Cingulata       17.8 
+##  4 Afrosoricida    15.6 
+##  5 Pilosa          14.4 
+##  6 Rodentia        12.5 
+##  7 Diprotodontia   12.4 
+##  8 Soricomorpha    11.1 
+##  9 Primates        10.5 
+## 10 Erinaceomorpha  10.2 
+## 11 Carnivora       10.1 
+## 12 Scandentia       8.9 
+## 13 Monotremata      8.6 
+## 14 Lagomorpha       8.4 
+## 15 Hyracoidea       5.67
+## 16 Artiodactyla     4.52
+## 17 Cetacea          4.5 
+## 18 Proboscidea      3.6 
+## 19 Perissodactyla   3.47
+\end{verbatim}
+
+\hypertarget{what-is-the-average-total-sleep-time-for-all-vore-types}{%
+\subsubsection{What is the average total sleep time for all vore types ?}\label{what-is-the-average-total-sleep-time-for-all-vore-types}}
+
+\begin{verbatim}
+## # A tibble: 5 x 2
+##   vore     mean
+##   <chr>   <dbl>
+## 1 carni   10.4 
+## 2 herbi    9.51
+## 3 insecti 14.9 
+## 4 omni    10.9 
+## 5 <NA>    10.2
+\end{verbatim}
+
+\hypertarget{omitting-any-rows-that-contain-missing-values-what-is-the-average-total-sleep-time-for-all-vore-types-remember-that-you-will-need-to-use-the-drop_na-function-to-help-you.}{%
+\subsubsection{\texorpdfstring{Omitting any rows that contain missing values, what is the average total sleep time for all vore types ? Remember that you will need to use the \textbf{drop\_na} function to help you.}{Omitting any rows that contain missing values, what is the average total sleep time for all vore types ? Remember that you will need to use the drop\_na function to help you.}}\label{omitting-any-rows-that-contain-missing-values-what-is-the-average-total-sleep-time-for-all-vore-types-remember-that-you-will-need-to-use-the-drop_na-function-to-help-you.}}
+
+\begin{verbatim}
+## # A tibble: 4 x 2
+##   vore     mean
+##   <chr>   <dbl>
+## 1 carni   13.3 
+## 2 herbi    9.52
+## 3 insecti 14.0 
+## 4 omni    12.2
+\end{verbatim}
+
+\hypertarget{remove-all-rows-that-contain-a-missing-value-and-save-the-result-into-a-new-data-table-called-msleep_na.-how-many-rows-does-msleep_na-contain}{%
+\subsubsection{\texorpdfstring{Remove all rows that contain a missing value and save the result into a new data table called \textbf{msleep\_na}. How many rows does msleep\_na contain ?}{Remove all rows that contain a missing value and save the result into a new data table called msleep\_na. How many rows does msleep\_na contain ?}}\label{remove-all-rows-that-contain-a-missing-value-and-save-the-result-into-a-new-data-table-called-msleep_na.-how-many-rows-does-msleep_na-contain}}
+
+\begin{verbatim}
+## [1] 20
+\end{verbatim}
+
+\hypertarget{using-msleep_na-find-the-average-braintwt-for-all-vores-by-order.-note-that-the-group_by-function-can-take-multiple-arguments.}{%
+\subsubsection{Using msleep\_na, find the average braintwt for all vores by order. Note that the group\_by() function can take multiple arguments.}\label{using-msleep_na-find-the-average-braintwt-for-all-vores-by-order.-note-that-the-group_by-function-can-take-multiple-arguments.}}
+
+\begin{verbatim}
+## # A tibble: 12 x 3
+## # Groups:   order [10]
+##    order           vore        mean
+##    <chr>           <chr>      <dbl>
+##  1 Artiodactyla    herbi   0.423   
+##  2 Artiodactyla    omni    0.18    
+##  3 Carnivora       carni   0.0478  
+##  4 Chiroptera      insecti 0.000300
+##  5 Cingulata       carni   0.0108  
+##  6 Didelphimorphia omni    0.0063  
+##  7 Erinaceomorpha  omni    0.0035  
+##  8 Lagomorpha      herbi   0.0121  
+##  9 Perissodactyla  herbi   0.412   
+## 10 Rodentia        herbi   0.0032  
+## 11 Soricomorpha    insecti 0.00120 
+## 12 Soricomorpha    omni    0.000215
 \end{verbatim}
 
 \bibliography{book.bib,packages.bib}

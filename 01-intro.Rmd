@@ -268,4 +268,3 @@ data1 <- read.csv(url,header=T,sep=",")
 head(data1)
 ```
 
-

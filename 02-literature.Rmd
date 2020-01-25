@@ -256,10 +256,10 @@ is called **Split Apply Combine**. The idea is that we
 
 1) Split up the data frame by gender group
 2) Then for each group, apply the average function
-3) Then combine the average results with each group
+3) Then combine the average results for each group
 
 ```{r}
-group_by(df,gender)
+summarize(group_by(df,gender),av_age=mean(age))
 ```
 
 ![](./figures/morpheus.png){width=600}
@@ -269,7 +269,11 @@ group_by(df,gender)
 
 Before moving forward let us consider the "pipe" operator that is included with the dplyr - well actually **magrittr** package. This is used to make it possible to "pipe" the results of one command into another command and so on.
 
-The inspiration for this comes from the UNIX/LINUX operating system where pipes are used all the time. So in effect using "pipes" is nothing new in the world of research computation. **Warning:** Once you get used to pipes it is hard to go back to not using them. 
+The inspiration for this comes from the UNIX/LINUX operating system where pipes are used all the time. So in effect using "pipes" is nothing new in the world of research computation. 
+
+![](./figures/unix_pipe.png)
+
+**Warning:** Once you get used to pipes it is hard to go back to not using them. 
 
 Let’s use the mtcars data frame to illustrate the basics of the piping mechanism as used by dplyr. Here we will select the **mpg** and **am** column from mtcars and view the top 5 rows.
 
@@ -277,7 +281,11 @@ Let’s use the mtcars data frame to illustrate the basics of the piping mechani
 head(select(mtcars, mpg, am))
 ```
 
-Okay, how would we do this using pipes ? Whoa !
+Okay, how would we do this using pipes ? Whoa ! Note that each command is "it's own thing" independently of the pipe character. 
+So the:
+      - output of mtcars goes into the 
+      - input of the **select** function whose output goes into the
+      - input of the **head** function
 
 ```{r}
 mtcars %>% select(mpg, am) %>% head
@@ -289,19 +297,26 @@ Break this down:
 mtcars %>% select(mpg, am)
 ```
 
-The key to understanding how this works is to **read** this from left to right. Let's use our new found knowledge to reimagine our use of the **group_by** and **summarize** functions. 
+The key to understanding how this works is to **read** this from left to right. It bears repeating that each command is "it's own thing" independently of the pipe character. So the:
 
-## Pipes and Split Apply Combine
+    - output of mtcars goes into the 
+    - input of the **select** function whose output goes into the
+    - input of the **head** function
+
+Let's use our new found knowledge to re-imagine our use of the **group_by** and **summarize** functions that we have been using in **composite** form up unitl now. 
+
+## Using Pipes To Do Split-Apply-Combine
 
 ```{r}
 df %>% group_by(gender) %>% summarize(avg=mean(age))
 
-# Same as this but the pipes are far more elegant
+# Same as the following but the pipes don't require you to "commit"
+# With the following, you have to know in advance what you want to do
 
 summarize(group_by(df,gender), avg=mean(age))
 ```
 
-This approach allows us to build a "pipeline" containing commands. We don't have to commit to a specific sequence. This enables a free-form type of exploration.
+This approach allows us to build a "pipeline" containing commands. We don't have to commit to a specific sequence of functions. This enables a free-form type of exploration.
 
 ```{r}
 df %>% 
@@ -319,17 +334,250 @@ df %>%
 
 ![](./figures/chrt.png)
 
+### Saving Results
 
-Using the built in mtcars dataframe, **filter** for records where the wt is greater than 3.3 tons.
+It should be observed that if you want to save the results of some sequence of commands that you will need to use the "<-" operator. Using the previous example we could the following to save our result.
 
-Then, using the **mutate** function, create a column called ab_be (Y or N) that indicates whether that observation’s mpg is greater (or not) than the average mpg for the filtered set.
+```{r}
+results <- df %>% 
+              filter(gender == "MALE") %>% 
+              summarize(med_age=median(age))
+```
 
-Then present the average mpg for each group. This is easy using pipes and dplyr verbs
+
+## An Example 
+
+Using the built in mtcars dataframe, do the following:
+   
+   1) **filter** for records where the wt is greater than 3.3 tons.
+
+   2) Then, using the **mutate** function to create a column called 
+      ab_be (Y or N) that indicates whether that observation’s 
+      mpg is greater (or not) than the average mpg for the filtered set.
+
+   3) Then present the average mpg for each group. 
+   
+This is easy using pipes and dplyr verbs. 
 
 ```{r}
 mtcars %>% filter(wt > 3.3)  %>%
-          mutate(ab_be=ifelse(mpg > mean(mpg),"Y","N")) %>%
-          group_by(ab_be) %>% 
-          summarize(mean_mpg=mean(mpg))
+           mutate(ab_be=ifelse(mpg > mean(mpg),"Y","N")) %>%
+           group_by(ab_be) %>% 
+           summarize(mean_mpg=mean(mpg))
+```
+
+This could be then "piped" into the input of the **ggplot** command to plot a  corresponding bar chart. If you don't yet know ggplot then it's okay as this will nudge you in that direction. Both **ggplot** and **dplyr** are part of the **tidyverse** which means that the two packages "talk" to each other well. 
+
+```{r}
+mtcars %>% filter(wt > 3.3)  %>%
+           mutate(ab_be=ifelse(mpg > mean(mpg),"Y","N")  ) %>%
+           group_by(ab_be) %>% summarize(mean_mpg=mean(mpg)) %>%
+           ggplot(aes(x=ab_be,y=mean_mpg)) +
+           geom_bar(stat="identity") +
+           ggtitle("Mean MPG") + labs(x = "ab_be", y = "Mean MPG")
+```
+
+## Working With Flowers
+
+Let's work with the built in **iris** data frame to explore the world of flowers. This is famous (Fisher's or Anderson's) **iris** data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.  
+
+I'll use dyplr idioms here as opposed to the typical Base R approach which might involve use of composite functions. First, load up the iris data 
+
+```{r}
+data(iris)
+```
+
+
+### Structure of The Data frame 
+
+It's always helpful to look at what types of data you have in a data frame. As you already known, base R has a function called **str** which is useful. The tidyverse equivalent is **glimpse** although the two commands basically provide the same types of information. Personally, I still prefer the "old" **str** function if only because I've been using it for so long. 
+
+```{r}
+str(iris)
+```
+
+```{r}
+glimpse(iris)
+```
+
+
+### More Practice
+
+1) Get all the rows where the Species is "setosa" Sepal.Length is > 4.7 
+but < 5.0. Use the pipes feature to help you with this.
+
+```{r}
+iris %>% 
+  filter(Sepal.Length > 4.7 & Sepal.Length < 5.0 & Species=="setosa" )
+```
+
+2) Select out only the columns relating Sepal measurements. List only the top five rows:
+
+```{r}
+iris %>% select(c(Sepal.Length,Sepal.Width)) %>% head(5)
+
+# Or use a helper function to process strings
+
+iris %>% select(starts_with("Sepal")) %>% head(5)
+
+# Or if you know which column numbers you want
+
+iris %>% select(c(1:2)) %>% head(5)
+```
+
+3) Sort the data frame by Sepal.Width such that the row with the largest Sepal.Width is listed first. Print only the first 5 rows
+
+```{r}
+iris %>% arrange(desc(Sepal.Width)) %>% head(5)
+```
+
+
+4) How many observations are there for each Species group ? 
+
+```{r}
+iris %>% group_by(Species) %>% count()
+
+# Or
+
+iris %>% group_by(Species) %>% summarize(total=n())
+```
+
+5) Select all columns that do NOT relate to Length. Limit output to 5 rows
+
+```{r}
+iris %>% select(-ends_with("Length")) %>% head()
+```
+
+6) Select all columns that do NOT relate to Length or Species. Limit output to 5 rows
+
+```{r}
+iris %>% select(-c(ends_with("Length"),"Species")) %>% head()
+
+# Or
+
+iris %>% select(-ends_with("Length")) %>% select(-"Species") %>% head()
+```
+
+7) Select all columns that do NOT relate to Length or Species. But only for observations where Sepal.Width is > 3.9.  There are multiples way to attack this problem.
+
+
+```{r}
+iris %>% filter(Sepal.Width > 3.9) %>% 
+  select(-ends_with("Length")) %>% 
+  select(-"Species")
+
+# Or
+
+iris %>% select(-ends_with("Length")) %>% 
+  select(-"Species") %>%
+  filter(Sepal.Width > 3.9) 
+```
+
+8) Determine the mean, standard deviation, max, and min for Sepal.Length
+
+```{r}
+iris %>% summarize(mean=mean(Sepal.Length),
+                   sd=sd(Sepal.Length),
+                   max=max(Sepal.Length),
+                   min=min(Sepal.Length))
+```
+
+
+9) For each Species type, determine the mean, standard deviation, max, and min for Sepal.Length
+
+```{r}
+iris %>% group_by(Species) %>% summarize(mean=mean(Sepal.Length),
+                                         sd=sd(Sepal.Length),
+                                         max=max(Sepal.Length),
+                                         min=min(Sepal.Length))
+```
+
+# Your Turn
+
+Now it's time for you to try some exercises on your own. The **ggplot2** package (which is part of the larger **tidyverse** comes with some data sets one of which is called **msleep**. It's easy to load into your workspace:
+
+```{r}
+data(msleep)
+```
+
+This data set is 
+
+ > an updated and expanded version of the mammals sleep dataset. Updated sleep times and weights were taken from V. M. Savage and G. B. West. A quantitative, theoretical framework for understanding mammalian sleep. Proceedings of the National Academy of Sciences, 104 (3):1051-1056, 2007
+
+![](./figures/vore.png){width=600}
+
+You can always get the names of the columns in a data frame using **str** or **names**
+
+```{r}
+names(msleep)
+
+#
+
+str(msleep)
+```
+
+
+Not only is this a new data frame for you it also has the added challenge of containing some missing values - those pesky "NAs". In the older approach we used the function **complete.cases** to help us figure out which rows had at least one missin value. We could still use that here although the **dplyr** world has a function called **drop_na()** which could be used but itself or as part of a pipeline. 
+
+
+Here are some questions I want you to answer. Note that the answers are provided so you can check your work. However, the code used to generate the answer is not visible. There is typically more than one way to answer the question. 
+
+
+#### What is the average total sleep time for Omnivores ? 
+
+```{r echo=FALSE}
+msleep %>% filter(vore=="omni") %>% summarize(mean=mean(sleep_total))
+
+# Or
+
+msleep %>% group_by(vore) %>% 
+  summarize(mean=mean(sleep_total)) %>% 
+  filter(vore=="omni")
+```
+
+
+#### Group the msleep data frame by taxanomic order and then summarize the mean sleep total for each group. Make sure the resulting table is arranged in descending order of the average - from highest sleep_total average to the lowest
+
+
+```{r echo=FALSE}
+msleep %>% 
+  group_by(order) %>% 
+  summarize(avg=mean(sleep_total)) %>%
+  arrange(desc(avg))
+```
+
+#### What is the average total sleep time for all vore types ? 
+
+
+```{r echo=FALSE}
+msleep %>% group_by(vore) %>% 
+  summarize(mean=mean(sleep_total))
+```
+
+
+#### Omitting any rows that contain missing values, what is the average total sleep time for all vore types ? Remember that you will need to use the **drop_na** function to help you. 
+
+```{r echo=FALSE}
+msleep %>% 
+  drop_na() %>% 
+  group_by(vore) %>% 
+  summarize(mean=mean(sleep_total))
+```
+
+
+#### Remove all rows that contain a missing value and save the result into a new data table called **msleep_na**. How many rows does msleep_na contain ? 
+
+```{r echo=FALSE}
+msleep_na <- msleep %>% drop_na()
+msleep_na %>% nrow()
+```
+
+
+#### Using msleep_na, find the average braintwt for all vores by order. Note that the group_by() function can take multiple arguments. 
+
+```{r echo=FALSE}
+msleep_na %>% 
+  group_by(order,vore) %>% 
+  summarize(mean=mean(brainwt))
 ```
 

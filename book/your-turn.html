@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Your Turn | Intro To dplyr</title>
+  <meta name="description" content="An Intro to data manipulation with dplyr" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Your Turn | Intro To dplyr" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="An Intro to data manipulation with dplyr" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Your Turn | Intro To dplyr" />
+  
+  <meta name="twitter:description" content="An Intro to data manipulation with dplyr" />
+  
+
+<meta name="author" content="Steve Pittard" />
+
+
+<meta name="date" content="2020-01-25" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="split-apply-combine.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Intro To dplyr</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> R Data Structures</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#vectors"><i class="fa fa-check"></i><b>1.1</b> Vectors</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-frames"><i class="fa fa-check"></i><b>1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#a-reference-data-frame"><i class="fa fa-check"></i><b>1.3</b> A Reference Data Frame</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#relation-to-dplyr"><i class="fa fa-check"></i><b>1.4</b> Relation to dplyr</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="digging-in.html"><a href="digging-in.html"><i class="fa fa-check"></i><b>2</b> Digging In</a><ul>
+<li class="chapter" data-level="2.1" data-path="digging-in.html"><a href="digging-in.html#structure"><i class="fa fa-check"></i><b>2.1</b> Structure</a></li>
+<li class="chapter" data-level="2.2" data-path="digging-in.html"><a href="digging-in.html#meta-information"><i class="fa fa-check"></i><b>2.2</b> Meta Information</a></li>
+<li class="chapter" data-level="2.3" data-path="digging-in.html"><a href="digging-in.html#printing"><i class="fa fa-check"></i><b>2.3</b> Printing</a></li>
+<li class="chapter" data-level="2.4" data-path="digging-in.html"><a href="digging-in.html#accessing-rows-and-columns"><i class="fa fa-check"></i><b>2.4</b> Accessing Rows And Columns</a></li>
+<li class="chapter" data-level="2.5" data-path="digging-in.html"><a href="digging-in.html#interrogation"><i class="fa fa-check"></i><b>2.5</b> Interrogation</a></li>
+<li class="chapter" data-level="2.6" data-path="digging-in.html"><a href="digging-in.html#missing-values"><i class="fa fa-check"></i><b>2.6</b> Missing values</a></li>
+<li class="chapter" data-level="2.7" data-path="digging-in.html"><a href="digging-in.html#continuous-vs-factors"><i class="fa fa-check"></i><b>2.7</b> Continuous vs Factors</a></li>
+<li class="chapter" data-level="2.8" data-path="digging-in.html"><a href="digging-in.html#sorting-data"><i class="fa fa-check"></i><b>2.8</b> Sorting data</a></li>
+<li class="chapter" data-level="2.9" data-path="digging-in.html"><a href="digging-in.html#reading-csv-files"><i class="fa fa-check"></i><b>2.9</b> Reading CSV Files</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-tidyverse.html"><a href="the-tidyverse.html"><i class="fa fa-check"></i><b>3</b> The tidyverse</a><ul>
+<li class="chapter" data-level="3.1" data-path="the-tidyverse.html"><a href="the-tidyverse.html#installing"><i class="fa fa-check"></i><b>3.1</b> Installing</a></li>
+<li class="chapter" data-level="3.2" data-path="the-tidyverse.html"><a href="the-tidyverse.html#dplyr-basics"><i class="fa fa-check"></i><b>3.2</b> dplyr Basics</a></li>
+<li class="chapter" data-level="3.3" data-path="the-tidyverse.html"><a href="the-tidyverse.html#first-steps"><i class="fa fa-check"></i><b>3.3</b> First Steps</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="the-tidyverse.html"><a href="the-tidyverse.html#filter"><i class="fa fa-check"></i><b>3.3.1</b> filter()</a></li>
+<li class="chapter" data-level="3.3.2" data-path="the-tidyverse.html"><a href="the-tidyverse.html#mutate"><i class="fa fa-check"></i><b>3.3.2</b> mutate()</a></li>
+<li class="chapter" data-level="3.3.3" data-path="the-tidyverse.html"><a href="the-tidyverse.html#arrange"><i class="fa fa-check"></i><b>3.3.3</b> arrange()</a></li>
+<li class="chapter" data-level="3.3.4" data-path="the-tidyverse.html"><a href="the-tidyverse.html#select"><i class="fa fa-check"></i><b>3.3.4</b> select()</a></li>
+<li class="chapter" data-level="3.3.5" data-path="the-tidyverse.html"><a href="the-tidyverse.html#group_by"><i class="fa fa-check"></i><b>3.3.5</b> group_by()</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="split-apply-combine.html"><a href="split-apply-combine.html"><i class="fa fa-check"></i><b>4</b> Split Apply Combine</a><ul>
+<li class="chapter" data-level="4.1" data-path="split-apply-combine.html"><a href="split-apply-combine.html#what-are-pipes"><i class="fa fa-check"></i><b>4.1</b> What Are Pipes ?</a></li>
+<li class="chapter" data-level="4.2" data-path="split-apply-combine.html"><a href="split-apply-combine.html#using-pipes-to-do-split-apply-combine"><i class="fa fa-check"></i><b>4.2</b> Using Pipes To Do Split-Apply-Combine</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="split-apply-combine.html"><a href="split-apply-combine.html#saving-results"><i class="fa fa-check"></i><b>4.2.1</b> Saving Results</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="split-apply-combine.html"><a href="split-apply-combine.html#an-example"><i class="fa fa-check"></i><b>4.3</b> An Example</a></li>
+<li class="chapter" data-level="4.4" data-path="split-apply-combine.html"><a href="split-apply-combine.html#working-with-flowers"><i class="fa fa-check"></i><b>4.4</b> Working With Flowers</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="split-apply-combine.html"><a href="split-apply-combine.html#structure-of-the-data-frame"><i class="fa fa-check"></i><b>4.4.1</b> Structure of The Data frame</a></li>
+<li class="chapter" data-level="4.4.2" data-path="split-apply-combine.html"><a href="split-apply-combine.html#more-practice"><i class="fa fa-check"></i><b>4.4.2</b> More Practice</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="your-turn.html"><a href="your-turn.html"><i class="fa fa-check"></i><b>5</b> Your Turn</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Intro To dplyr</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="your-turn" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Your Turn</h1>
+<p>Now it’s time for you to try some exercises on your own. The <strong>ggplot2</strong> package (which is part of the larger <strong>tidyverse</strong> comes with some data sets one of which is called <strong>msleep</strong>. It’s easy to load into your workspace:</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" data-line-number="1"><span class="kw">data</span>(msleep)</a></code></pre></div>
+<p>This data set is</p>
+<blockquote>
+<p>an updated and expanded version of the mammals sleep dataset. Updated sleep times and weights were taken from V. M. Savage and G. B. West. A quantitative, theoretical framework for understanding mammalian sleep. Proceedings of the National Academy of Sciences, 104 (3):1051-1056, 2007</p>
+</blockquote>
+<p><img src="figures/vore.png" width="600" /></p>
+<p>You can always get the names of the columns in a data frame using <strong>str</strong> or <strong>names</strong></p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" data-line-number="1"><span class="kw">names</span>(msleep)</a></code></pre></div>
+<pre><code>##  [1] &quot;name&quot;         &quot;genus&quot;        &quot;vore&quot;         &quot;order&quot;       
+##  [5] &quot;conservation&quot; &quot;sleep_total&quot;  &quot;sleep_rem&quot;    &quot;sleep_cycle&quot; 
+##  [9] &quot;awake&quot;        &quot;brainwt&quot;      &quot;bodywt&quot;</code></pre>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" data-line-number="1"><span class="co">#</span></a>
+<a class="sourceLine" id="cb204-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb204-3" data-line-number="3"><span class="kw">str</span>(msleep)</a></code></pre></div>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    83 obs. of  11 variables:
+##  $ name        : chr  &quot;Cheetah&quot; &quot;Owl monkey&quot; &quot;Mountain beaver&quot; &quot;Greater short-tailed shrew&quot; ...
+##  $ genus       : chr  &quot;Acinonyx&quot; &quot;Aotus&quot; &quot;Aplodontia&quot; &quot;Blarina&quot; ...
+##  $ vore        : chr  &quot;carni&quot; &quot;omni&quot; &quot;herbi&quot; &quot;omni&quot; ...
+##  $ order       : chr  &quot;Carnivora&quot; &quot;Primates&quot; &quot;Rodentia&quot; &quot;Soricomorpha&quot; ...
+##  $ conservation: chr  &quot;lc&quot; NA &quot;nt&quot; &quot;lc&quot; ...
+##  $ sleep_total : num  12.1 17 14.4 14.9 4 14.4 8.7 7 10.1 3 ...
+##  $ sleep_rem   : num  NA 1.8 2.4 2.3 0.7 2.2 1.4 NA 2.9 NA ...
+##  $ sleep_cycle : num  NA NA NA 0.133 0.667 ...
+##  $ awake       : num  11.9 7 9.6 9.1 20 9.6 15.3 17 13.9 21 ...
+##  $ brainwt     : num  NA 0.0155 NA 0.00029 0.423 NA NA NA 0.07 0.0982 ...
+##  $ bodywt      : num  50 0.48 1.35 0.019 600 ...</code></pre>
+<p>Not only is this a new data frame for you it also has the added challenge of containing some missing values - those pesky “NAs”. In the older approach we used the function <strong>complete.cases</strong> to help us figure out which rows had at least one missin value. We could still use that here although the <strong>dplyr</strong> world has a function called <strong>drop_na()</strong> which could be used but itself or as part of a pipeline.</p>
+<p>Here are some questions I want you to answer. Note that the answers are provided so you can check your work. However, the code used to generate the answer is not visible. There is typically more than one way to answer the question.</p>
+<div id="what-is-the-average-total-sleep-time-for-omnivores" class="section level4">
+<h4><span class="header-section-number">5.0.0.1</span> What is the average total sleep time for Omnivores ?</h4>
+<pre><code>## # A tibble: 1 x 1
+##    mean
+##   &lt;dbl&gt;
+## 1  10.9</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   vore   mean
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1 omni   10.9</code></pre>
+</div>
+<div id="group-the-msleep-data-frame-by-taxanomic-order-and-then-summarize-the-mean-sleep-total-for-each-group.-make-sure-the-resulting-table-is-arranged-in-descending-order-of-the-average---from-highest-sleep_total-average-to-the-lowest" class="section level4">
+<h4><span class="header-section-number">5.0.0.2</span> Group the msleep data frame by taxanomic order and then summarize the mean sleep total for each group. Make sure the resulting table is arranged in descending order of the average - from highest sleep_total average to the lowest</h4>
+<pre><code>## # A tibble: 19 x 2
+##    order             avg
+##    &lt;chr&gt;           &lt;dbl&gt;
+##  1 Chiroptera      19.8 
+##  2 Didelphimorphia 18.7 
+##  3 Cingulata       17.8 
+##  4 Afrosoricida    15.6 
+##  5 Pilosa          14.4 
+##  6 Rodentia        12.5 
+##  7 Diprotodontia   12.4 
+##  8 Soricomorpha    11.1 
+##  9 Primates        10.5 
+## 10 Erinaceomorpha  10.2 
+## 11 Carnivora       10.1 
+## 12 Scandentia       8.9 
+## 13 Monotremata      8.6 
+## 14 Lagomorpha       8.4 
+## 15 Hyracoidea       5.67
+## 16 Artiodactyla     4.52
+## 17 Cetacea          4.5 
+## 18 Proboscidea      3.6 
+## 19 Perissodactyla   3.47</code></pre>
+</div>
+<div id="what-is-the-average-total-sleep-time-for-all-vore-types" class="section level4">
+<h4><span class="header-section-number">5.0.0.3</span> What is the average total sleep time for all vore types ?</h4>
+<pre><code>## # A tibble: 5 x 2
+##   vore     mean
+##   &lt;chr&gt;   &lt;dbl&gt;
+## 1 carni   10.4 
+## 2 herbi    9.51
+## 3 insecti 14.9 
+## 4 omni    10.9 
+## 5 &lt;NA&gt;    10.2</code></pre>
+</div>
+<div id="omitting-any-rows-that-contain-missing-values-what-is-the-average-total-sleep-time-for-all-vore-types-remember-that-you-will-need-to-use-the-drop_na-function-to-help-you." class="section level4">
+<h4><span class="header-section-number">5.0.0.4</span> Omitting any rows that contain missing values, what is the average total sleep time for all vore types ? Remember that you will need to use the <strong>drop_na</strong> function to help you.</h4>
+<pre><code>## # A tibble: 4 x 2
+##   vore     mean
+##   &lt;chr&gt;   &lt;dbl&gt;
+## 1 carni   13.3 
+## 2 herbi    9.52
+## 3 insecti 14.0 
+## 4 omni    12.2</code></pre>
+</div>
+<div id="remove-all-rows-that-contain-a-missing-value-and-save-the-result-into-a-new-data-table-called-msleep_na.-how-many-rows-does-msleep_na-contain" class="section level4">
+<h4><span class="header-section-number">5.0.0.5</span> Remove all rows that contain a missing value and save the result into a new data table called <strong>msleep_na</strong>. How many rows does msleep_na contain ?</h4>
+<pre><code>## [1] 20</code></pre>
+</div>
+<div id="using-msleep_na-find-the-average-braintwt-for-all-vores-by-order.-note-that-the-group_by-function-can-take-multiple-arguments." class="section level4">
+<h4><span class="header-section-number">5.0.0.6</span> Using msleep_na, find the average braintwt for all vores by order. Note that the group_by() function can take multiple arguments.</h4>
+<pre><code>## # A tibble: 12 x 3
+## # Groups:   order [10]
+##    order           vore        mean
+##    &lt;chr&gt;           &lt;chr&gt;      &lt;dbl&gt;
+##  1 Artiodactyla    herbi   0.423   
+##  2 Artiodactyla    omni    0.18    
+##  3 Carnivora       carni   0.0478  
+##  4 Chiroptera      insecti 0.000300
+##  5 Cingulata       carni   0.0108  
+##  6 Didelphimorphia omni    0.0063  
+##  7 Erinaceomorpha  omni    0.0035  
+##  8 Lagomorpha      herbi   0.0121  
+##  9 Perissodactyla  herbi   0.412   
+## 10 Rodentia        herbi   0.0032  
+## 11 Soricomorpha    insecti 0.00120 
+## 12 Soricomorpha    omni    0.000215</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="split-apply-combine.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["nursing_741.pdf", "nursing_741.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
