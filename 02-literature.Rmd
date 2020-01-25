@@ -581,3 +581,15 @@ msleep_na %>%
   summarize(mean=mean(brainwt))
 ```
 
+
+# Taking It To The Next Level
+
+Here we look at some data obtained from the City of Chicago Open Data Portal <https://data.cityofchicago.org/>. This is data that represents phone calls to the police during the year of 2012. Just pick a folder on your hard drive and download the data. 
+
+
+```{r eval=FALSE}
+url <- "http://steviep42.bitbucket.org/YOUTUBE.DIR/chi_crimes.csv"
+
+download.file(url,"chi_crimes.csv")
+
+```
