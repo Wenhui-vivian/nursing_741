@@ -582,14 +582,436 @@ msleep_na %>%
 ```
 
 
-# Taking It To The Next Level
+# Chicago Crime Data
 
 Here we look at some data obtained from the City of Chicago Open Data Portal <https://data.cityofchicago.org/>. This is data that represents phone calls to the police during the year of 2012. Just pick a folder on your hard drive and download the data. 
 
 
+## Getting the Data
+
 ```{r eval=FALSE}
-url <- "http://steviep42.bitbucket.org/YOUTUBE.DIR/chi_crimes.csv"
+url <- "https://raw.githubusercontent.com/steviep42/nursing_741/master/chi_crimes.csv"
 
 download.file(url,"chi_crimes.csv")
+```
+
+
+Next, read the file in to a local data frame:
+
+
+```{r}
+chi <- read_csv("chi_crimes.csv")
+```
+
+## Inspecting the Data
+
+The way the data is organzied is that each row represents a call to the police which may or may not result in an actual arrest. In any case there will be a case number assigned to the call and other information such as the Best, Ward, Block, and Community Area will be noted.  If there is an arrest it will be recorded and then it will be categorized according to an FBI code. The location of the call will be recorded in latitude and longitude. Some basic questions might be how many rows and columns there are, etc
+
+
+```{r}
+glimpse(chi)
+```
+
+So let's check this data frame out some more. For example, what are the factors in this data frame ? Those that take on only a few different values might be good summary variables.
+
+```{r}
+chi %>% summarize_all(n_distinct)
+```
+
+
+From viewing thism perhaps variables like Arrest, Domestic, FBI Code, District, and Ward could be good summary variables. We don't really have any kind of measured data here. 
+
+We do have lots of dates which at this point are actually character strings so let's turn them into dates and then work with them to get some more summary variables created. There are also some latitude and longitude information that we perhaps later use to draw some maps if we want. We'll consider that later. 
+
+## Creating Some Dates
+
+```{r}
+suppressMessages(library(lubridate))
+# Right now the dates and times are just a character string
+
+str(chi$Date)  
+
+# Note that the dates have a PM or AM string. Let's exploit 
+# that information to create a category that captures this information.
+
+chi <- chi %>% mutate(am_pm=ifelse(grepl("PM",Date),"PM","AM")) 
+
+# Let's turn them into actual dates and times using the lubridate package
+
+chi$Date <- parse_date_time(chi$Date,'%m/%d/%Y %I:%M:%S %p')
+
+range(chi$Date)
+```
+
+It's worth noting that we can use some functions from lubridate to further group the dates and times so we can do some more specific analysis. [Here](http://www.noamross.net/blog/2014/2/10/using-times-and-dates-in-r---presentation-code.html) is link to a tutorial on lubridate. Anyway try some of these:
+
+```{r}
+# List the first 5 records from the chi data table
+chi$Date %>% head
+
+# This will tell us what day of the week the given date and time represents
+chi$Date %>% weekdays %>% head
+
+# This will tell us what month the date and time falls into
+chi$Date %>% months %>% head
+
+# Let's add a factor to the data table/data frame that gives the month
+chi <- chi %>% mutate(Month=months(Date)) 
+
+unique(chi$Month)
+```
+
+
+Let's add in a few more factors based on the date since it will help us build some interesting tables as we try to understand the patterns in Chicago crime during the year of 2013. It is also important to understand how to work with dates since they wind up being important when looking at data. Not every data set will be a function of dates or be reliant upon them for interpretation but this one is. 
+
+It's also not necessary to create these categories in advance or make them part of the data frame. We could do this on the fly as we will see later. We will create a category to classify the quarter during which the call to the police occurred.
+
+```{r}
+chi <- chi %>% mutate(quarter=quarter(Date)) 
+
+chi <- chi %>% mutate(weekdays=weekdays(Date))
+
+chi %>% select(Month, am_pm, weekdays, quarter) %>% head()
+```
+
+## Count Arrests
+
+Now we can start to ask some basic questions to better understand the data. When we have lots of categories in our data for which we could make some count-based summaries which gives us some frequencies. For example, let's focus on the "Arrest" variable to figure out how many Arrests happened. What about the FBI codes ? 
+
+```{r}
+# This gives us a table of Arrests vs non-Arrests
+
+chi %>% count(Arrest)
+
+# And we could see the count of reported crimes according to FBI code
+
+chi %>% count(`FBI Code`) %>% arrange(desc(n))
+```
+
+Relative to the FBI codes I don't know what the code actually mean but I found a description of them at [this URL](http://gis.chicagopolice.org/clearmap_crime_sums/crime_types.html)
+So it seems to me that the top 5 areas, at least by FBI codes, are: 
+
+* Larceny
+* Simple Battery
+* Vandalism
+* Drug Abuse
+* Misc Non-Index Offense
+
+We could do two-way table of course. This helps us look at relationships between categories. Here we look at how Arrests relate to whether it's day or night. When do most arrests occur ? 
+
+```{r}
+chi %>% 
+  count(Arrest,am_pm) %>% 
+  filter(Arrest==TRUE) %>% 
+  arrange(desc(n))
+```
+
+So let's plot a bar chart that shows is the total number of calls to the police for each month and what portion of those calls each monht resulted in an arrest.
+
+```{r}
+chi %>% count(Arrest,Month) %>% 
+  ggplot(aes(x=Month,y=n,fill=Arrest)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x=element_text(angle=45)) + 
+  ylab("Calls To Police") +
+  ggtitle("Chicago Arrests per Month in 2013")
+```
+
+We could also put the bars next to each other. Notice here that I use the **group_by()** function with **summarize()** whereas before I used the **count()** function. The two approaches are equivalent. 
+
+```{r}
+chi %>% group_by(Arrest,Month) %>% 
+  summarize(total=n()) %>% 
+  ggplot(aes(x=Month,y=total,fill=Arrest)) + 
+  geom_bar(stat="identity",position=position_dodge()) + 
+  theme(axis.text.x=element_text(angle=45)) + 
+  ggtitle("Chicago Arrests per Month in 2013")
 
 ```
+
+## Crime At Day vs Night
+
+In terms of number of calls to Police let's see how many calls there were per month and then break that down by night vs day. You can see then that calling at night is more frequent. Intuitively this makes some sense. 
+
+```{r}
+chi %>% group_by(am_pm,Month) %>% 
+  summarize(total=n()) %>% 
+  ggplot(aes(x=Month,y=total,fill=am_pm)) + 
+  geom_bar(stat="identity",position=position_dodge()) + 
+  theme(axis.text.x=element_text(angle=45)) + 
+  ggtitle("Calls to Police per Month in 2013")
+
+```
+
+## Line Graphs and Histograms
+
+Let's try something else here. The lubridate package has a function that we can use to get the numeric day of the year. For example January 5, 2012 would be the 5th day of the year. So we could add up the number of calls to the police for each day of the year and maybe plot that as a line chart. Notice here how we create the **ydays** category on the fly. We don't need to create it as part of the data frame. 
+
+```{r}
+chi %>% mutate(ydays = yday(Date)) %>% 
+  group_by(ydays) %>% summarize(total_calls=n()) %>% 
+  ggplot(aes(x=ydays,y=total_calls)) + geom_line() +
+  ggtitle("Calls per Each Day of 2012") + 
+  xlab("Day of the year 1 - 365") +
+  ylab("Total Calls to the Police")
+
+```
+
+Now if we wanted to we could split the line graph up into two different panels or "facets" as ggplot calls it. This won't take much more than what we already had before. We'll just throw in the am_pm variable.
+
+```{r}
+chi %>% 
+  mutate(ydays = yday(Date)) %>% 
+  group_by(am_pm,ydays) %>% 
+  summarize(total_calls=n()) %>%
+  ggplot(aes(x=ydays,y=total_calls)) + geom_line() + facet_grid(am_pm~.)
+```
+
+That looks okay but what about changing the arrangmenet of the panels ? That's easy - we just change the formula in the **facet_grid** layer
+
+```{r}
+chi %>% 
+  mutate(ydays = yday(Date)) %>% 
+  group_by(am_pm,ydays) %>% 
+  summarize(total_calls=n()) %>%
+  ggplot(aes(x=ydays,y=total_calls)) + geom_line() + facet_grid(.~am_pm)
+
+```
+
+
+Now we could also use a function called **hour** which given the date will extract the hour of the day that the call to the police occurred. Let's generate a histogram of calls to the police based on the hour of the day. We'll pick a bin size of 24 since this will match the number of hours 
+
+```{r}
+
+chi %>% mutate(hod=hour(Date)) %>% 
+  ggplot(aes(x=hod)) + 
+  geom_histogram(bins=24,color="black",fill="white") + 
+  ggtitle("Call Count by Hour of the Day") +
+  xlab("Hour of the day 0 - 23") + theme_bw()
+
+```
+
+## What Types of Crime Do We See ? 
+
+Next up lets look at the counts for the most frequently committed types of crimes. This will help us understand what our risks are should we consider living in Chicago. First we can create a table of all the Crime types by using the **Primary Type** variable.
+
+```{r}
+# Sort the Crime Types From Highest Count to Lowest
+chi %>% count(`Primary Type`) %>% arrange(desc(n))
+
+# Equivalent to 
+
+chi %>% 
+  group_by(`Primary Type`) %>% 
+  summarize(n=n()) %>%
+  arrange(desc(n))
+```
+
+Let's make a barplot. Most of this relates to using ggplot to plot things which can make you think that the dplyr verbs are complex when they aren't. We did have to **mutate** the **Primary Type** variable to reorder it according to the corresponding number of crimes for each type. This is what makes the bar plot organize the bars according to highest to lowest. 
+
+```{r}
+chi %>% count(`Primary Type`) %>% 
+  arrange(desc(n)) %>% 
+  ggplot(aes(x=reorder(`Primary Type`,-n),y=n)) + 
+  geom_bar(stat="identity",fill="#f68060", alpha=.6, width=.8) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+```
+
+
+Let's clean this plot up to show say only the top 12 crime types. Well, we don't know that these were actual crimes - only that the call was classified into a certain category. 
+
+```{r}
+chi %>% group_by(`Primary Type`) %>% 
+  summarize(n=n()) %>% 
+  arrange(desc(n)) %>% 
+  slice(1:20) %>% 
+  ggplot(aes(x=reorder(`Primary Type`,-n),y=n)) + 
+  geom_bar(stat="identity",fill="#f68060", alpha=.6, width=.8) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+```
+
+So this just gives us the total number of police calls relating to a given crime type. It doesn't say very much about the total number of arrests that were made.
+
+```{r}
+chi %>% group_by(Arrest,`Primary Type`) %>% 
+  summarize(n=n()) %>% 
+  arrange(desc(n)) %>% 
+  slice(1:20) %>% 
+  ggplot(aes(x=reorder(`Primary Type`,-n),y=n,fill=Arrest)) + 
+  geom_bar(stat="identity", width=.8) +
+  xlab("Crime Type") +
+  ylab("Total Calls") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+This is illuminating in that almost all the calls relating to NARCOTICS seem to result in an arrest. Let's examine these offenses in greater detail since they don't seem to fit the pattern. That is most of the other crime reports don't seem to result in arrest expcept maybe prostitution, criminal trespass, and weapons violation. We can drill down some more. Let's slice out the lower 10 of the top 20. 
+
+
+```{r}
+chi %>% group_by(Arrest,`Primary Type`) %>% 
+  summarize(count=n()) %>% 
+  arrange(desc(count)) %>% 
+  slice(10:20) %>% 
+  ggplot(aes(x=reorder(`Primary Type`,-count),
+             y=count,fill=Arrest)) +     
+  geom_bar(stat="identity",width=.8) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+Oh so now we see that there are several areas that tend to result in an arrest. Narcotics isn't the only one at all. This seems a little weird to me though because ALL prostitution calls result in an arrest. Let's filter out some of these crimes to see what is going on.
+
+```{r}
+chi %>% filter(grepl("PROST",Description)) %>% 
+  group_by(Arrest) %>% 
+  summarize(cnt=n())
+
+#
+
+chi %>% filter(grepl("BURGLARY",`Primary Type`)) %>% 
+  group_by(Arrest) %>% 
+  summarize(cnt=n())
+
+```
+
+More stuff to consider about NARCOTICS
+
+```{r}
+chi %>% filter(grepl("NARCOTICS",`Primary Type`)) %>% 
+  group_by(Description) %>%
+  summarize(count=n()) %>%
+  arrange(desc(count)) %>% 
+  slice(1:10) %>% 
+  ggplot(aes(x=reorder(Description,-count),
+             y=count)) +      
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+So looks like we have lots of people getting arrested for possession of cannabis of 30 grams or less. Heroin, Crack, and Cocaine arrests are next in line but the bulk of arrests relate to cannabis. Now there are also some arrests relating to Cannabis possession with amounts greater than 30 Grams.
+
+
+```{r}
+
+# Most of the > 30GMS cannabis possession happens in the STREET
+
+chi %>% filter(grepl("CANNABIS MORE THAN 30GMS",Description)) %>%
+  group_by(`Location Description`) %>% 
+  summarize(count=n()) %>%
+  arrange(desc(count))
+
+
+```
+
+
+## Creating A Map
+
+Next we will put some of these locations on a map - the ones that relate to narcotics. 
+
+```{r etmap13,cache=TRUE,eval=FALSE}
+library(ggmap)
+
+chi_map <- get_map("Chicago, Illinois",zoom=11,extent="device")
+```
+
+
+```{r}
+
+# The following reveals that there are 284 violations. 
+street <- chi %>% 
+  filter(grepl("CANNABIS MORE THAN 30GMS",Description)) %>%
+  filter(grepl("STREET",`Location Description`)) 
+  
+nrow(street)
+
+# Let's map these using R googleVis
+ggmap(chi_map) + geom_point(aes(x=Longitude,y=Latitude, 
+                         color=am_pm),alpha=1,data=street)
+
+
+```
+
+Now, let's compare this to all Narcotics Offenses
+```{r cache=TRUE}
+narcotics<- chi %>% filter(grepl("NARCOTICS",`Primary Type`))
+
+ggmap(chi_map) + geom_point(aes(x=Longitude,y=Latitude, 
+                         color=am_pm),alpha=.9,data=narcotics) 
+ 
+```
+
+There is a geometry called "stat_bin2d" that will allow us to bin locations into "containers" for purposes of plotting. Here we create a "bubble" chart which let's us collect reported crime locations areas (squares) so we can maybe see where these crimes are being committed. The problem with this approach is that it doesn't give us a strong idea about how many crimes are happening in these areas. 
+
+
+
+```{r cache=TRUE}
+ggmap(chi_map) + 
+  stat_bin2d(
+    aes(x=Longitude, y=Latitude, color=am_pm, fill=am_pm),
+    size= .5,bins=30, alpha=1/2,
+    data = narcotics
+  )
+```
+
+We can use some predefined terms such as "..level.." to get counts of the lat lons in an area which will then be reflected in "fill". This plot winds up being very cool and informative. We can see that the Nartotics offenses are happening on the East Side and near the University Village and Little Italy. 
+
+```{r getmap13,cache=TRUE,eval=FALSE}
+chi_map_13 <- get_map("Chicago,Illinois",zoom=13,extent="device")
+```
+
+
+
+```{r statd13,eval=FALSE}
+#ggmap(chi_map_13) +
+#  stat_density2d(
+#    aes(x = Longitude, y =Latitude, fill = ..level..,
+#        alpha = ..level..),
+#    size = 2, bins = 4, data = narcotics, geom = "polygon")
+
+```
+
+![](./figures/dense2.png){width=800}
+
+```{r cache=TRUE,eval=FALSE}
+ChiMap <- ggmap(chi_map_13, 
+                base_layer = ggplot(aes(x = Longitude, 
+                                        y = Latitude),
+                                        data = narcotics))
+
+# Now we overlay the base with a density based approach
+# The more crime a location experienvces, the darker the color
+
+ChiMap +
+ stat_density2d(aes(x = Longitude, y =Latitude, 
+                    fill = ..level.., alpha = ..level..),
+                size = 2, bins = 4, 
+                data = narcotics, 
+                geom = "polygon") + facet_wrap(~weekdays)
+```
+
+![](./figures/sfacets.png){width=800}
+
+## Leaflet 
+
+**Leaflet** is a javascript library that simplifies the creation of maps and placement of markers there upon. R has a companion package called "leaflet" that you can use to help create some really nice maps. All that is required is some latitutde and longtiude information which we already have since we are working with the Chicago data. 
+
+Let's continue with the Narcotics data and see where these are occurring. I think you will like the output that leafelt provides because it is interactive and you can zoom in and out of the data
+
+
+```{r leaflet}
+library(leaflet)
+
+m <- leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(lng=narcotics$Longitude,
+             lat=narcotics$Latitude,
+             popup=narcotics$Description,
+             clusterOptions = markerClusterOptions())
+
+m
+```
+
+

@@ -50,6 +50,19 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.2/leaflet.js"></script>
+<link href="libs/leaflet-markercluster-1.0.5/MarkerCluster.css" rel="stylesheet" />
+<link href="libs/leaflet-markercluster-1.0.5/MarkerCluster.Default.css" rel="stylesheet" />
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.js"></script>
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.freezable.js"></script>
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.layersupport.js"></script>
 
 
 <style type="text/css">
@@ -171,7 +184,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="your-turn.html"><a href="your-turn.html"><i class="fa fa-check"></i><b>5</b> Your Turn</a></li>
-<li class="chapter" data-level="6" data-path="taking-it-to-the-next-level.html"><a href="taking-it-to-the-next-level.html"><i class="fa fa-check"></i><b>6</b> Taking It To The Next Level</a></li>
+<li class="chapter" data-level="6" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html"><i class="fa fa-check"></i><b>6</b> Chicago Crime Data</a><ul>
+<li class="chapter" data-level="6.1" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#getting-the-data"><i class="fa fa-check"></i><b>6.1</b> Getting the Data</a></li>
+<li class="chapter" data-level="6.2" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>6.2</b> Inspecting the Data</a></li>
+<li class="chapter" data-level="6.3" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#creating-some-dates"><i class="fa fa-check"></i><b>6.3</b> Creating Some Dates</a></li>
+<li class="chapter" data-level="6.4" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#count-arrests"><i class="fa fa-check"></i><b>6.4</b> Count Arrests</a></li>
+<li class="chapter" data-level="6.5" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#crime-at-day-vs-night"><i class="fa fa-check"></i><b>6.5</b> Crime At Day vs Night</a></li>
+<li class="chapter" data-level="6.6" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#line-graphs-and-histograms"><i class="fa fa-check"></i><b>6.6</b> Line Graphs and Histograms</a></li>
+<li class="chapter" data-level="6.7" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#what-types-of-crime-do-we-see"><i class="fa fa-check"></i><b>6.7</b> What Types of Crime Do We See ?</a></li>
+<li class="chapter" data-level="6.8" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#creating-a-map"><i class="fa fa-check"></i><b>6.8</b> Creating A Map</a></li>
+<li class="chapter" data-level="6.9" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#leaflet"><i class="fa fa-check"></i><b>6.9</b> Leaflet</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -426,58 +449,25 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 <p>This is big deal. Most “real” data has rows that do not contain values for all columns. This is the so called “missing value” problem. Here is an example. The following code will read in a version of the mtcars data frame that has some missing values:</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/steviep42/utilities/master/data/mtcars_na.csv&quot;</span></a>
 <a class="sourceLine" id="cb59-2" data-line-number="2">(mtcars_na &lt;-<span class="st"> </span><span class="kw">read.csv</span>(url, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>))</a></code></pre></div>
-<pre><code>##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-## 1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
-## 2  21.0   6 160.0 110 3.90    NA 17.02  0  1    4    4
-## 3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
-## 4  21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
-## 5  18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
-## 6  18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
-## 7  14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
-## 8  24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
-## 9  22.8   4 140.8  95 3.92    NA 22.90  1  0    4    2
-## 10 19.2   6 167.6 123 3.92 3.440 18.30  1  0    4   NA
-## 11 17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
-## 12 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3   NA
-## 13 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
-## 14 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
-## 15 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
-## 16 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
-## 17 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
-## 18 32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
-## 19 30.4   4  75.7  52 4.93 1.615 18.52  1  1    4   NA
-## 20 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4   NA
-## 21 21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
-## 22 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
-## 23 15.2   8 304.0 150 3.15    NA 17.30  0  0    3   NA
-## 24 13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
-## 25 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
-## 26 27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
-## 27 26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
-## 28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5   NA
-## 29 15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
-## 30 19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
-## 31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
-## 32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
 <p>If you look, you can see the missing values “NA” present in certain columns. This is R’s way of indicating what is missing. There are functions that can help you find these. This is important because, for example, if you wanted to find the average value of a column, say the <strong>wt</strong> column then there will be a problem as it contains a missing value:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">mean</span>(mtcars_na<span class="op">$</span>wt)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="kw">mean</span>(mtcars_na<span class="op">$</span>wt)</a></code></pre></div>
 <pre><code>## [1] NA</code></pre>
 <p>We have to tell the function to remove missing values from consideration.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="kw">mean</span>(mtcars<span class="op">$</span>wt, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1"><span class="kw">mean</span>(mtcars<span class="op">$</span>wt, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## [1] 3.21725</code></pre>
 <p>A more general approach would involve the following functions.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">complete.cases</span>(mtcars_na)</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="kw">complete.cases</span>(mtcars_na)</a></code></pre></div>
 <pre><code>##  [1]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
 ## [12] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
 ## [23] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co"># How many rows in the df do not contain any NAs ?</span></a>
-<a class="sourceLine" id="cb67-2" data-line-number="2"><span class="kw">sum</span>(<span class="kw">complete.cases</span>(mtcars_na))</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="co"># How many rows in the df do not contain any NAs ?</span></a>
+<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="kw">sum</span>(<span class="kw">complete.cases</span>(mtcars_na))</a></code></pre></div>
 <pre><code>## [1] 24</code></pre>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="co"># How many rows in the df do contain at least one NA ?</span></a>
-<a class="sourceLine" id="cb69-2" data-line-number="2"><span class="kw">sum</span>(<span class="op">!</span><span class="kw">complete.cases</span>(mtcars_na))</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="co"># How many rows in the df do contain at least one NA ?</span></a>
+<a class="sourceLine" id="cb68-2" data-line-number="2"><span class="kw">sum</span>(<span class="op">!</span><span class="kw">complete.cases</span>(mtcars_na))</a></code></pre></div>
 <pre><code>## [1] 8</code></pre>
 <p>How would we find those rows and print them ?</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1">mtcars_na[<span class="kw">complete.cases</span>(mtcars_na),]</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">mtcars_na[<span class="kw">complete.cases</span>(mtcars_na),]</a></code></pre></div>
 <pre><code>##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 ## 1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 ## 3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
@@ -504,7 +494,7 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 ## 31 15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
 ## 32 21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
 <p>And here are the ones that do contain missing values:</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1">mtcars_na[<span class="op">!</span><span class="kw">complete.cases</span>(mtcars_na),]</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1">mtcars_na[<span class="op">!</span><span class="kw">complete.cases</span>(mtcars_na),]</a></code></pre></div>
 <pre><code>##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 ## 2  21.0   6 160.0 110 3.90    NA 17.02  0  1    4    4
 ## 9  22.8   4 140.8  95 3.92    NA 22.90  1  0    4    2
@@ -515,7 +505,7 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 ## 23 15.2   8 304.0 150 3.15    NA 17.30  0  0    3   NA
 ## 28 30.4   4  95.1 113 3.77 1.513 16.90  1  1    5   NA</code></pre>
 <p>One quick way to omit rows with missing values is:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1"><span class="kw">na.omit</span>(mtcars_na)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="kw">na.omit</span>(mtcars_na)</a></code></pre></div>
 <pre><code>##     mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 ## 1  21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 ## 3  22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
@@ -545,39 +535,39 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 <div id="continuous-vs-factors" class="section level2">
 <h2><span class="header-section-number">2.7</span> Continuous vs Factors</h2>
 <p>One <strong>recipe</strong> that I use frequently is given below. This tells me how many unqiue values are assumed by each column which then helps to identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don’t let the code here scare you. If you are new to R and don’t yet understand what is going on then just use this as a “recipe” for now.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" data-line-number="1"><span class="kw">sapply</span>(mtcars, <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x)))</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="kw">sapply</span>(mtcars, <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x)))</a></code></pre></div>
 <pre><code>##  mpg  cyl disp   hp drat   wt qsec   vs   am gear carb 
 ##   25    3   27   22   22   29   30    2    2    3    6</code></pre>
 <p>So it looks to me, for example, that <strong>cyl, vs, am, gear, and carb</strong> are actually categories rather than measured quantities. If you look at the help page for mtcars you will see that <strong>am</strong> is a 0 or 1 which corresponds to, respectively, a car with an automatic transmission (0) or a manual transmission (1). If you use the <strong>summarize</strong> function it will treat this variable as a numeric, continuous quantity.</p>
 <p>Is it actually possible to have a transmission value of 0.4062 ?</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">summary</span>(mtcars<span class="op">$</span>am)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1"><span class="kw">summary</span>(mtcars<span class="op">$</span>am)</a></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##  0.0000  0.0000  0.0000  0.4062  1.0000  1.0000</code></pre>
 <p>I might then use some code to transform this into factors so that when they are used with various modeling functions they will be recognized as such. For example, if we summarize the data frame right now, we will see the following</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1"><span class="kw">summary</span>(mtcars<span class="op">$</span>am)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="kw">summary</span>(mtcars<span class="op">$</span>am)</a></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##  0.0000  0.0000  0.0000  0.4062  1.0000  1.0000</code></pre>
 <p>Let’s turn <strong>am</strong> into a factor</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1">mtcars<span class="op">$</span>am &lt;-<span class="st"> </span><span class="kw">factor</span>(mtcars<span class="op">$</span>am, </a>
-<a class="sourceLine" id="cb83-2" data-line-number="2">                    <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </a>
-<a class="sourceLine" id="cb83-3" data-line-number="3">                    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Auto&quot;</span>,<span class="st">&quot;Man&quot;</span>) )</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" data-line-number="1">mtcars<span class="op">$</span>am &lt;-<span class="st"> </span><span class="kw">factor</span>(mtcars<span class="op">$</span>am, </a>
+<a class="sourceLine" id="cb82-2" data-line-number="2">                    <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb82-3" data-line-number="3">                    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Auto&quot;</span>,<span class="st">&quot;Man&quot;</span>) )</a></code></pre></div>
 <p>Now the summary will make more sense. This is also useful because graphics packages such as ggplot2 will know how to handle factors.</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1"><span class="kw">summary</span>(mtcars<span class="op">$</span>am)</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1"><span class="kw">summary</span>(mtcars<span class="op">$</span>am)</a></code></pre></div>
 <pre><code>## Auto  Man 
 ##   19   13</code></pre>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="kw">ggplot</span>(mtcars,<span class="kw">aes</span>(<span class="dt">x=</span>wt,<span class="dt">y=</span>mpg)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb86-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb86-3" data-line-number="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>am)</a></code></pre></div>
-<p><img src="nursing_741_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1"><span class="kw">ggplot</span>(mtcars,<span class="kw">aes</span>(<span class="dt">x=</span>wt,<span class="dt">y=</span>mpg)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb85-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb85-3" data-line-number="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>am)</a></code></pre></div>
+<p><img src="nursing_741_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
 </div>
 <div id="sorting-data" class="section level2">
 <h2><span class="header-section-number">2.8</span> Sorting data</h2>
 <p>Sorting rows in a data fram is a common activity. However, in Base R this is called “ordering” because of the function used to “order” the data. Let’s say we want to sort or “order” the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the <strong>order</strong> function’s output. What are those numbers ?</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" data-line-number="1"><span class="kw">order</span>(mtcars<span class="op">$</span>mpg)</a></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="kw">order</span>(mtcars<span class="op">$</span>mpg)</a></code></pre></div>
 <pre><code>##  [1] 15 16 24  7 17 31 14 23 22 29 12 13 11  6  5 10 25 30  1  2  4 32 21
 ## [24]  3  9  8 27 26 19 28 18 20</code></pre>
 <p>Oh, so they are row numbers corresponding to rows in mtcars. Row 15 has the car with the lowest mpg. Row 16 corresponds to the car with the next lowest mpg and so on. So we can use this information to order our dataframe accordingly:</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" data-line-number="1">mtcars[<span class="kw">order</span>(mtcars<span class="op">$</span>mpg),]</a></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" data-line-number="1">mtcars[<span class="kw">order</span>(mtcars<span class="op">$</span>mpg),]</a></code></pre></div>
 <pre><code>##                      mpg cyl  disp  hp drat    wt  qsec vs   am gear carb
 ## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0 Auto    3    4
 ## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0 Auto    3    4
@@ -612,7 +602,7 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 ## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  Man    4    1
 ## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  Man    4    1</code></pre>
 <p>To invert the sense of the order use the <strong>rev</strong> function. We’ll also use the head function to list only the first 5 rows of the result. Note that in base R, using composite functions is welcomed although you will find out that this is not a value in the tidyverse. For math people, using a composite function is natural which, in large part, is why R embraced that approach early on.</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" data-line-number="1"><span class="kw">head</span>(mtcars[<span class="kw">rev</span>(<span class="kw">order</span>(mtcars<span class="op">$</span>mpg)),])</a></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1"><span class="kw">head</span>(mtcars[<span class="kw">rev</span>(<span class="kw">order</span>(mtcars<span class="op">$</span>mpg)),])</a></code></pre></div>
 <pre><code>##                 mpg cyl  disp  hp drat    wt  qsec vs  am gear carb
 ## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1 Man    4    1
 ## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1 Man    4    1
@@ -624,11 +614,11 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 <div id="reading-csv-files" class="section level2">
 <h2><span class="header-section-number">2.9</span> Reading CSV Files</h2>
 <p>Many times data will be read in from a comma delimited file exported from Excel. These are known as Comma Separated Value files - generally abbreviated as <strong>CSV</strong>. The file can be read from a local drive or even from the Web as long as you know the URL associated with the file. In this example, there is a file on the Internet relating to some testing data involving students and various subjects.</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1">url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/pittardsp/bios545r_spring_2018/master/SUPPORT/hsb2.csv&quot;</span></a>
-<a class="sourceLine" id="cb93-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb93-3" data-line-number="3">data1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(url,<span class="dt">header=</span>T,<span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</a>
-<a class="sourceLine" id="cb93-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb93-5" data-line-number="5"><span class="kw">head</span>(data1)</a></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" data-line-number="1">url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/pittardsp/bios545r_spring_2018/master/SUPPORT/hsb2.csv&quot;</span></a>
+<a class="sourceLine" id="cb92-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb92-3" data-line-number="3">data1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(url,<span class="dt">header=</span>T,<span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</a>
+<a class="sourceLine" id="cb92-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb92-5" data-line-number="5"><span class="kw">head</span>(data1)</a></code></pre></div>
 <pre><code>##    id female race ses schtyp prog read write math science socst
 ## 1  70      0    4   1      1    1   57    52   41      47    57
 ## 2 121      1    4   2      1    3   68    59   53      63    61

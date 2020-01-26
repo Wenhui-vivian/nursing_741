@@ -50,6 +50,19 @@
 
 
 
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.2/leaflet.js"></script>
+<link href="libs/leaflet-markercluster-1.0.5/MarkerCluster.css" rel="stylesheet" />
+<link href="libs/leaflet-markercluster-1.0.5/MarkerCluster.Default.css" rel="stylesheet" />
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.js"></script>
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.freezable.js"></script>
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.layersupport.js"></script>
 
 
 <style type="text/css">
@@ -171,7 +184,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="your-turn.html"><a href="your-turn.html"><i class="fa fa-check"></i><b>5</b> Your Turn</a></li>
-<li class="chapter" data-level="6" data-path="taking-it-to-the-next-level.html"><a href="taking-it-to-the-next-level.html"><i class="fa fa-check"></i><b>6</b> Taking It To The Next Level</a></li>
+<li class="chapter" data-level="6" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html"><i class="fa fa-check"></i><b>6</b> Chicago Crime Data</a><ul>
+<li class="chapter" data-level="6.1" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#getting-the-data"><i class="fa fa-check"></i><b>6.1</b> Getting the Data</a></li>
+<li class="chapter" data-level="6.2" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>6.2</b> Inspecting the Data</a></li>
+<li class="chapter" data-level="6.3" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#creating-some-dates"><i class="fa fa-check"></i><b>6.3</b> Creating Some Dates</a></li>
+<li class="chapter" data-level="6.4" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#count-arrests"><i class="fa fa-check"></i><b>6.4</b> Count Arrests</a></li>
+<li class="chapter" data-level="6.5" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#crime-at-day-vs-night"><i class="fa fa-check"></i><b>6.5</b> Crime At Day vs Night</a></li>
+<li class="chapter" data-level="6.6" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#line-graphs-and-histograms"><i class="fa fa-check"></i><b>6.6</b> Line Graphs and Histograms</a></li>
+<li class="chapter" data-level="6.7" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#what-types-of-crime-do-we-see"><i class="fa fa-check"></i><b>6.7</b> What Types of Crime Do We See ?</a></li>
+<li class="chapter" data-level="6.8" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#creating-a-map"><i class="fa fa-check"></i><b>6.8</b> Creating A Map</a></li>
+<li class="chapter" data-level="6.9" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#leaflet"><i class="fa fa-check"></i><b>6.9</b> Leaflet</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -201,7 +224,7 @@ is called <strong>Split Apply Combine</strong>. The idea is that we</p>
 <li>Then for each group, apply the average function</li>
 <li>Then combine the average results for each group</li>
 </ol>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" data-line-number="1"><span class="kw">summarize</span>(<span class="kw">group_by</span>(df,gender),<span class="dt">av_age=</span><span class="kw">mean</span>(age))</a></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" data-line-number="1"><span class="kw">summarize</span>(<span class="kw">group_by</span>(df,gender),<span class="dt">av_age=</span><span class="kw">mean</span>(age))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   gender av_age
 ##   &lt;fct&gt;   &lt;dbl&gt;
@@ -215,7 +238,7 @@ is called <strong>Split Apply Combine</strong>. The idea is that we</p>
 <p><img src="figures/unix_pipe.png" /></p>
 <p><strong>Warning:</strong> Once you get used to pipes it is hard to go back to not using them.</p>
 <p>Let’s use the mtcars data frame to illustrate the basics of the piping mechanism as used by dplyr. Here we will select the <strong>mpg</strong> and <strong>am</strong> column from mtcars and view the top 5 rows.</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">select</span>(mtcars, mpg, am))</a></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">select</span>(mtcars, mpg, am))</a></code></pre></div>
 <pre><code>##                    mpg   am
 ## Mazda RX4         21.0  Man
 ## Mazda RX4 Wag     21.0  Man
@@ -228,7 +251,7 @@ So the:
 - output of mtcars goes into the
 - input of the <strong>select</strong> function whose output goes into the
 - input of the <strong>head</strong> function</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(mpg, am) <span class="op">%&gt;%</span><span class="st"> </span>head</a></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb150-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(mpg, am) <span class="op">%&gt;%</span><span class="st"> </span>head</a></code></pre></div>
 <pre><code>##                    mpg   am
 ## Mazda RX4         21.0  Man
 ## Mazda RX4 Wag     21.0  Man
@@ -237,7 +260,7 @@ So the:
 ## Hornet Sportabout 18.7 Auto
 ## Valiant           18.1 Auto</code></pre>
 <p>Break this down:</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(mpg, am)</a></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(mpg, am)</a></code></pre></div>
 <pre><code>##                      mpg   am
 ## Mazda RX4           21.0  Man
 ## Mazda RX4 Wag       21.0  Man
@@ -279,43 +302,43 @@ So the:
 </div>
 <div id="using-pipes-to-do-split-apply-combine" class="section level2">
 <h2><span class="header-section-number">4.2</span> Using Pipes To Do Split-Apply-Combine</h2>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb156-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">avg=</span><span class="kw">mean</span>(age))</a></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">avg=</span><span class="kw">mean</span>(age))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   gender   avg
 ##   &lt;fct&gt;  &lt;dbl&gt;
 ## 1 FEMALE    64
 ## 2 MALE      70</code></pre>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" data-line-number="1"><span class="co"># Same as the following but the pipes don&#39;t require you to &quot;commit&quot;</span></a>
-<a class="sourceLine" id="cb158-2" data-line-number="2"><span class="co"># With the following, you have to know in advance what you want to do</span></a>
-<a class="sourceLine" id="cb158-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb158-4" data-line-number="4"><span class="kw">summarize</span>(<span class="kw">group_by</span>(df,gender), <span class="dt">avg=</span><span class="kw">mean</span>(age))</a></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" data-line-number="1"><span class="co"># Same as the following but the pipes don&#39;t require you to &quot;commit&quot;</span></a>
+<a class="sourceLine" id="cb157-2" data-line-number="2"><span class="co"># With the following, you have to know in advance what you want to do</span></a>
+<a class="sourceLine" id="cb157-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb157-4" data-line-number="4"><span class="kw">summarize</span>(<span class="kw">group_by</span>(df,gender), <span class="dt">avg=</span><span class="kw">mean</span>(age))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   gender   avg
 ##   &lt;fct&gt;  &lt;dbl&gt;
 ## 1 FEMALE    64
 ## 2 MALE      70</code></pre>
 <p>This approach allows us to build a “pipeline” containing commands. We don’t have to commit to a specific sequence of functions. This enables a free-form type of exploration.</p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb160-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb160-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">avg=</span><span class="kw">mean</span>(age),<span class="dt">total=</span><span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb159-2" data-line-number="2"><span class="st">  </span><span class="kw">group_by</span>(gender) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb159-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">avg=</span><span class="kw">mean</span>(age),<span class="dt">total=</span><span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 3
 ##   gender   avg total
 ##   &lt;fct&gt;  &lt;dbl&gt; &lt;int&gt;
 ## 1 FEMALE    64     2
 ## 2 MALE      70     3</code></pre>
 <p>What is the median age of all males ?</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb162-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;MALE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb162-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">med_age=</span><span class="kw">median</span>(age))</a></code></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb161-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;MALE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb161-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">med_age=</span><span class="kw">median</span>(age))</a></code></pre></div>
 <pre><code>##   med_age
 ## 1      70</code></pre>
 <p><img src="figures/chrt.png" /></p>
 <div id="saving-results" class="section level3">
 <h3><span class="header-section-number">4.2.1</span> Saving Results</h3>
 <p>It should be observed that if you want to save the results of some sequence of commands that you will need to use the “&lt;-” operator. Using the previous example we could the following to save our result.</p>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" data-line-number="1">results &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb164-2" data-line-number="2"><span class="st">              </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;MALE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb164-3" data-line-number="3"><span class="st">              </span><span class="kw">summarize</span>(<span class="dt">med_age=</span><span class="kw">median</span>(age))</a></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" data-line-number="1">results &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb163-2" data-line-number="2"><span class="st">              </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;MALE&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb163-3" data-line-number="3"><span class="st">              </span><span class="kw">summarize</span>(<span class="dt">med_age=</span><span class="kw">median</span>(age))</a></code></pre></div>
 </div>
 </div>
 <div id="an-example" class="section level2">
@@ -329,40 +352,40 @@ mpg is greater (or not) than the average mpg for the filtered set.</p></li>
 <li><p>Then present the average mpg for each group.</p></li>
 </ol>
 <p>This is easy using pipes and dplyr verbs.</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb165-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(wt <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.3</span>)  <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb165-2" data-line-number="2"><span class="st">           </span><span class="kw">mutate</span>(<span class="dt">ab_be=</span><span class="kw">ifelse</span>(mpg <span class="op">&gt;</span><span class="st"> </span><span class="kw">mean</span>(mpg),<span class="st">&quot;Y&quot;</span>,<span class="st">&quot;N&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb165-3" data-line-number="3"><span class="st">           </span><span class="kw">group_by</span>(ab_be) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb165-4" data-line-number="4"><span class="st">           </span><span class="kw">summarize</span>(<span class="dt">mean_mpg=</span><span class="kw">mean</span>(mpg))</a></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(wt <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.3</span>)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb164-2" data-line-number="2"><span class="st">           </span><span class="kw">mutate</span>(<span class="dt">ab_be=</span><span class="kw">ifelse</span>(mpg <span class="op">&gt;</span><span class="st"> </span><span class="kw">mean</span>(mpg),<span class="st">&quot;Y&quot;</span>,<span class="st">&quot;N&quot;</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb164-3" data-line-number="3"><span class="st">           </span><span class="kw">group_by</span>(ab_be) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb164-4" data-line-number="4"><span class="st">           </span><span class="kw">summarize</span>(<span class="dt">mean_mpg=</span><span class="kw">mean</span>(mpg))</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   ab_be mean_mpg
 ##   &lt;chr&gt;    &lt;dbl&gt;
 ## 1 N         13.8
 ## 2 Y         18.1</code></pre>
 <p>This could be then “piped” into the input of the <strong>ggplot</strong> command to plot a corresponding bar chart. If you don’t yet know ggplot then it’s okay as this will nudge you in that direction. Both <strong>ggplot</strong> and <strong>dplyr</strong> are part of the <strong>tidyverse</strong> which means that the two packages “talk” to each other well.</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(wt <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.3</span>)  <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb167-2" data-line-number="2"><span class="st">           </span><span class="kw">mutate</span>(<span class="dt">ab_be=</span><span class="kw">ifelse</span>(mpg <span class="op">&gt;</span><span class="st"> </span><span class="kw">mean</span>(mpg),<span class="st">&quot;Y&quot;</span>,<span class="st">&quot;N&quot;</span>)  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb167-3" data-line-number="3"><span class="st">           </span><span class="kw">group_by</span>(ab_be) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean_mpg=</span><span class="kw">mean</span>(mpg)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb167-4" data-line-number="4"><span class="st">           </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ab_be,<span class="dt">y=</span>mean_mpg)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb167-5" data-line-number="5"><span class="st">           </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb167-6" data-line-number="6"><span class="st">           </span><span class="kw">ggtitle</span>(<span class="st">&quot;Mean MPG&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;ab_be&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Mean MPG&quot;</span>)</a></code></pre></div>
-<p><img src="nursing_741_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" data-line-number="1">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(wt <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.3</span>)  <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb166-2" data-line-number="2"><span class="st">           </span><span class="kw">mutate</span>(<span class="dt">ab_be=</span><span class="kw">ifelse</span>(mpg <span class="op">&gt;</span><span class="st"> </span><span class="kw">mean</span>(mpg),<span class="st">&quot;Y&quot;</span>,<span class="st">&quot;N&quot;</span>)  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb166-3" data-line-number="3"><span class="st">           </span><span class="kw">group_by</span>(ab_be) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean_mpg=</span><span class="kw">mean</span>(mpg)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb166-4" data-line-number="4"><span class="st">           </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>ab_be,<span class="dt">y=</span>mean_mpg)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb166-5" data-line-number="5"><span class="st">           </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb166-6" data-line-number="6"><span class="st">           </span><span class="kw">ggtitle</span>(<span class="st">&quot;Mean MPG&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;ab_be&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Mean MPG&quot;</span>)</a></code></pre></div>
+<p><img src="nursing_741_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
 </div>
 <div id="working-with-flowers" class="section level2">
 <h2><span class="header-section-number">4.4</span> Working With Flowers</h2>
 <p>Let’s work with the built in <strong>iris</strong> data frame to explore the world of flowers. This is famous (Fisher’s or Anderson’s) <strong>iris</strong> data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.</p>
 <p>I’ll use dyplr idioms here as opposed to the typical Base R approach which might involve use of composite functions. First, load up the iris data</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" data-line-number="1"><span class="kw">data</span>(iris)</a></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" data-line-number="1"><span class="kw">data</span>(iris)</a></code></pre></div>
 <div id="structure-of-the-data-frame" class="section level3">
 <h3><span class="header-section-number">4.4.1</span> Structure of The Data frame</h3>
 <p>It’s always helpful to look at what types of data you have in a data frame. As you already known, base R has a function called <strong>str</strong> which is useful. The tidyverse equivalent is <strong>glimpse</strong> although the two commands basically provide the same types of information. Personally, I still prefer the “old” <strong>str</strong> function if only because I’ve been using it for so long.</p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" data-line-number="1"><span class="kw">str</span>(iris)</a></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" data-line-number="1"><span class="kw">str</span>(iris)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
 ##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
 ##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
 ##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
 ##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
 ##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" data-line-number="1"><span class="kw">glimpse</span>(iris)</a></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" data-line-number="1"><span class="kw">glimpse</span>(iris)</a></code></pre></div>
 <pre><code>## Observations: 150
 ## Variables: 5
 ## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5…
@@ -377,8 +400,8 @@ mpg is greater (or not) than the average mpg for the filtered set.</p></li>
 <li>Get all the rows where the Species is “setosa” Sepal.Length is &gt; 4.7
 but &lt; 5.0. Use the pipes feature to help you with this.</li>
 </ol>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb173-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb173-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(Sepal.Length <span class="op">&gt;</span><span class="st"> </span><span class="fl">4.7</span> <span class="op">&amp;</span><span class="st"> </span>Sepal.Length <span class="op">&lt;</span><span class="st"> </span><span class="fl">5.0</span> <span class="op">&amp;</span><span class="st"> </span>Species<span class="op">==</span><span class="st">&quot;setosa&quot;</span> )</a></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb172-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(Sepal.Length <span class="op">&gt;</span><span class="st"> </span><span class="fl">4.7</span> <span class="op">&amp;</span><span class="st"> </span>Sepal.Length <span class="op">&lt;</span><span class="st"> </span><span class="fl">5.0</span> <span class="op">&amp;</span><span class="st"> </span>Species<span class="op">==</span><span class="st">&quot;setosa&quot;</span> )</a></code></pre></div>
 <pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 ## 1          4.9         3.0          1.4         0.2  setosa
 ## 2          4.9         3.1          1.5         0.1  setosa
@@ -392,25 +415,25 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 <ol start="2" style="list-style-type: decimal">
 <li>Select out only the columns relating Sepal measurements. List only the top five rows:</li>
 </ol>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb175-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(Sepal.Length,Sepal.Width)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(Sepal.Length,Sepal.Width)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
 <pre><code>##   Sepal.Length Sepal.Width
 ## 1          5.1         3.5
 ## 2          4.9         3.0
 ## 3          4.7         3.2
 ## 4          4.6         3.1
 ## 5          5.0         3.6</code></pre>
-<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" data-line-number="1"><span class="co"># Or use a helper function to process strings</span></a>
-<a class="sourceLine" id="cb177-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb177-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Sepal&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" data-line-number="1"><span class="co"># Or use a helper function to process strings</span></a>
+<a class="sourceLine" id="cb176-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb176-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Sepal&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
 <pre><code>##   Sepal.Length Sepal.Width
 ## 1          5.1         3.5
 ## 2          4.9         3.0
 ## 3          4.7         3.2
 ## 4          4.6         3.1
 ## 5          5.0         3.6</code></pre>
-<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb179-1" data-line-number="1"><span class="co"># Or if you know which column numbers you want</span></a>
-<a class="sourceLine" id="cb179-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb179-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" data-line-number="1"><span class="co"># Or if you know which column numbers you want</span></a>
+<a class="sourceLine" id="cb178-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb178-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
 <pre><code>##   Sepal.Length Sepal.Width
 ## 1          5.1         3.5
 ## 2          4.9         3.0
@@ -420,7 +443,7 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 <ol start="3" style="list-style-type: decimal">
 <li>Sort the data frame by Sepal.Width such that the row with the largest Sepal.Width is listed first. Print only the first 5 rows</li>
 </ol>
-<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Sepal.Width)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(Sepal.Width)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">5</span>)</a></code></pre></div>
 <pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 ## 1          5.7         4.4          1.5         0.4  setosa
 ## 2          5.5         4.2          1.4         0.2  setosa
@@ -430,7 +453,7 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 <ol start="4" style="list-style-type: decimal">
 <li>How many observations are there for each Species group ?</li>
 </ol>
-<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ## # Groups:   Species [3]
 ##   Species        n
@@ -438,9 +461,9 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 ## 1 setosa        50
 ## 2 versicolor    50
 ## 3 virginica     50</code></pre>
-<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" data-line-number="1"><span class="co"># Or</span></a>
-<a class="sourceLine" id="cb185-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb185-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" data-line-number="1"><span class="co"># Or</span></a>
+<a class="sourceLine" id="cb184-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb184-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">total=</span><span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   Species    total
 ##   &lt;fct&gt;      &lt;int&gt;
@@ -450,7 +473,7 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 <ol start="5" style="list-style-type: decimal">
 <li>Select all columns that do NOT relate to Length. Limit output to 5 rows</li>
 </ol>
-<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</a></code></pre></div>
 <pre><code>##   Sepal.Width Petal.Width Species
 ## 1         3.5         0.2  setosa
 ## 2         3.0         0.2  setosa
@@ -461,7 +484,7 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 <ol start="6" style="list-style-type: decimal">
 <li>Select all columns that do NOT relate to Length or Species. Limit output to 5 rows</li>
 </ol>
-<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>),<span class="st">&quot;Species&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb188-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>),<span class="st">&quot;Species&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</a></code></pre></div>
 <pre><code>##   Sepal.Width Petal.Width
 ## 1         3.5         0.2
 ## 2         3.0         0.2
@@ -469,9 +492,9 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 ## 4         3.1         0.2
 ## 5         3.6         0.2
 ## 6         3.9         0.4</code></pre>
-<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" data-line-number="1"><span class="co"># Or</span></a>
-<a class="sourceLine" id="cb191-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb191-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="st">&quot;Species&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" data-line-number="1"><span class="co"># Or</span></a>
+<a class="sourceLine" id="cb190-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb190-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="st">&quot;Species&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</a></code></pre></div>
 <pre><code>##   Sepal.Width Petal.Width
 ## 1         3.5         0.2
 ## 2         3.0         0.2
@@ -482,19 +505,19 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 <ol start="7" style="list-style-type: decimal">
 <li>Select all columns that do NOT relate to Length or Species. But only for observations where Sepal.Width is &gt; 3.9. There are multiples way to attack this problem.</li>
 </ol>
-<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Sepal.Width <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.9</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb193-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb193-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="st">&quot;Species&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Sepal.Width <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.9</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb192-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb192-3" data-line-number="3"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="st">&quot;Species&quot;</span>)</a></code></pre></div>
 <pre><code>##   Sepal.Width Petal.Width
 ## 1         4.0         0.2
 ## 2         4.4         0.4
 ## 3         4.1         0.1
 ## 4         4.2         0.2</code></pre>
-<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" data-line-number="1"><span class="co"># Or</span></a>
-<a class="sourceLine" id="cb195-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb195-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb195-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="st">&quot;Species&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb195-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(Sepal.Width <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.9</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" data-line-number="1"><span class="co"># Or</span></a>
+<a class="sourceLine" id="cb194-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb194-3" data-line-number="3">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">ends_with</span>(<span class="st">&quot;Length&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb194-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="st">&quot;Species&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb194-5" data-line-number="5"><span class="st">  </span><span class="kw">filter</span>(Sepal.Width <span class="op">&gt;</span><span class="st"> </span><span class="fl">3.9</span>) </a></code></pre></div>
 <pre><code>##   Sepal.Width Petal.Width
 ## 1         4.0         0.2
 ## 2         4.4         0.4
@@ -503,19 +526,19 @@ but &lt; 5.0. Use the pipes feature to help you with this.</li>
 <ol start="8" style="list-style-type: decimal">
 <li>Determine the mean, standard deviation, max, and min for Sepal.Length</li>
 </ol>
-<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(Sepal.Length),</a>
-<a class="sourceLine" id="cb197-2" data-line-number="2">                   <span class="dt">sd=</span><span class="kw">sd</span>(Sepal.Length),</a>
-<a class="sourceLine" id="cb197-3" data-line-number="3">                   <span class="dt">max=</span><span class="kw">max</span>(Sepal.Length),</a>
-<a class="sourceLine" id="cb197-4" data-line-number="4">                   <span class="dt">min=</span><span class="kw">min</span>(Sepal.Length))</a></code></pre></div>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(Sepal.Length),</a>
+<a class="sourceLine" id="cb196-2" data-line-number="2">                   <span class="dt">sd=</span><span class="kw">sd</span>(Sepal.Length),</a>
+<a class="sourceLine" id="cb196-3" data-line-number="3">                   <span class="dt">max=</span><span class="kw">max</span>(Sepal.Length),</a>
+<a class="sourceLine" id="cb196-4" data-line-number="4">                   <span class="dt">min=</span><span class="kw">min</span>(Sepal.Length))</a></code></pre></div>
 <pre><code>##       mean        sd max min
 ## 1 5.843333 0.8280661 7.9 4.3</code></pre>
 <ol start="9" style="list-style-type: decimal">
 <li>For each Species type, determine the mean, standard deviation, max, and min for Sepal.Length</li>
 </ol>
-<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(Sepal.Length),</a>
-<a class="sourceLine" id="cb199-2" data-line-number="2">                                         <span class="dt">sd=</span><span class="kw">sd</span>(Sepal.Length),</a>
-<a class="sourceLine" id="cb199-3" data-line-number="3">                                         <span class="dt">max=</span><span class="kw">max</span>(Sepal.Length),</a>
-<a class="sourceLine" id="cb199-4" data-line-number="4">                                         <span class="dt">min=</span><span class="kw">min</span>(Sepal.Length))</a></code></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" data-line-number="1">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean=</span><span class="kw">mean</span>(Sepal.Length),</a>
+<a class="sourceLine" id="cb198-2" data-line-number="2">                                         <span class="dt">sd=</span><span class="kw">sd</span>(Sepal.Length),</a>
+<a class="sourceLine" id="cb198-3" data-line-number="3">                                         <span class="dt">max=</span><span class="kw">max</span>(Sepal.Length),</a>
+<a class="sourceLine" id="cb198-4" data-line-number="4">                                         <span class="dt">min=</span><span class="kw">min</span>(Sepal.Length))</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 5
 ##   Species     mean    sd   max   min
 ##   &lt;fct&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;

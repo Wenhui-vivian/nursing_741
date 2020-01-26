@@ -137,7 +137,7 @@ mtcars[mtcars$mpg > quantile(mtcars$mpg)[4],]
 
 This is big deal. Most "real" data has rows that do not contain values for all columns. This is the so called "missing value" problem. Here is an example. The following code will read in a version of the mtcars data frame that has some missing values:
 
-```{r}
+```{r eval=FALSE}
 url <- "https://raw.githubusercontent.com/steviep42/utilities/master/data/mtcars_na.csv"
 (mtcars_na <- read.csv(url, stringsAsFactors = FALSE))
 ```
