@@ -15,3 +15,5 @@ XML
 ggmap
 osmdata
 leaflet
+readxl
+sf

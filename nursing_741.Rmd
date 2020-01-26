@@ -1225,6 +1225,22 @@ chi %>% mutate(hod=hour(Date)) %>%
 
 ```
 
+## Calendar Map
+
+The **googleVis** package has a way to create something known as a calendar heatmap. We can use dplyr functions, as we have been, to count the number of calls per day of the year and then use that to create the heatmap. Most of the work here is involved with mutating the date to a "Year Month Day" format after which we count the number of police calls that day. 
+
+```{r eval=FALSE}
+calend <- chi %>% 
+  mutate(ydays = ymd(format(chi$Date,"%Y-%m-%d"))) %>% 
+  group_by(ydays) %>% summarize(total_calls=n()) %>% 
+  gvisCalendar(.,datevar="ydays",numvar="total_calls",
+               options=list(width="1000px", height="300px"))
+plot(calend)
+```
+
+![](./figures/calend.png)
+
+
 ## What Types of Crime Do We See ? 
 
 Next up lets look at the counts for the most frequently committed types of crimes. This will help us understand what our risks are should we consider living in Chicago. First we can create a table of all the Crime types by using the **Primary Type** variable.
@@ -1345,7 +1361,7 @@ chi %>% filter(grepl("CANNABIS MORE THAN 30GMS",Description)) %>%
 
 Next we will put some of these locations on a map - the ones that relate to narcotics. 
 
-```{r etmap13,cache=TRUE,eval=FALSE}
+```{r etmap13,cache=TRUE}
 library(ggmap)
 
 chi_map <- get_map("Chicago, Illinois",zoom=11,extent="device")
@@ -1392,7 +1408,13 @@ ggmap(chi_map) +
 
 We can use some predefined terms such as "..level.." to get counts of the lat lons in an area which will then be reflected in "fill". This plot winds up being very cool and informative. We can see that the Narcotics offenses are happening on the East Side and near the University Village and Little Italy. 
 
-```{r getmap13,cache=TRUE,eval=FALSE}
+```{r echo=FALSE}
+register_google(key="AIzaSyAl4fVkTWpnEFanFZaKegkkRNC-WOFZjBk")
+```
+
+
+
+```{r getmap13,cache=TRUE}
 chi_map_13 <- get_map("Chicago,Illinois",zoom=13,extent="device")
 ```
 
