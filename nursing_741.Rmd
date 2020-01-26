@@ -161,7 +161,7 @@ knitr::write_bib(c(
 
 # Digging In
 
-Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or "features" that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogenous. When viewed as a column, the data is homogenous. 
+Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or "features" that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogeneous. When viewed as a column, the data is homogeneous. 
 
 ```{r}
 data(mtcars)
@@ -298,7 +298,7 @@ mtcars[mtcars$mpg > quantile(mtcars$mpg)[4],]
 
 This is big deal. Most "real" data has rows that do not contain values for all columns. This is the so called "missing value" problem. Here is an example. The following code will read in a version of the mtcars data frame that has some missing values:
 
-```{r eval=FALSE}
+```{r eval=F}
 url <- "https://raw.githubusercontent.com/steviep42/utilities/master/data/mtcars_na.csv"
 (mtcars_na <- read.csv(url, stringsAsFactors = FALSE))
 ```
@@ -350,7 +350,7 @@ na.omit(mtcars_na)
 
 ## Continuous vs Factors
 
-One **recipe** that I use frequently is given below. This tells me how many unqiue values are assumed by each column which then helps to  identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don't let the code here scare you. If you are new to R and don't yet understand what is going on then just use this as a "recipe" for now. 
+One **recipe** that I use frequently is given below. This tells me how many unique values are assumed by each column which then helps to  identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don't let the code here scare you. If you are new to R and don't yet understand what is going on then just use this as a "recipe" for now. 
 
 ```{r}
 sapply(mtcars, function(x) length(unique(x)))
@@ -398,7 +398,7 @@ ggplot(mtcars,aes(x=wt,y=mpg)) +
 
 ## Sorting data
 
-Sorting rows in a data fram is a common activity. However, in Base R this is called "ordering" because of the function used to "order" the data. Let's say we want to sort or "order" the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the **order** function's output. What are those numbers ? 
+Sorting rows in a data frame is a common activity. However, in Base R this is called "ordering" because of the function used to "order" the data. Let's say we want to sort or "order" the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the **order** function's output. What are those numbers ? 
 
 
 ```{r}
@@ -476,7 +476,7 @@ Note that the **cheatsheet** for **dplyr** can be [found here](https://github.co
 
 ## dplyr Basics
 
-**dplyr** is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges. In fact if you were paying attention during the opening section on data frames you will have noticed that most of the activities we performed related to the following activires. In dplyr-speak there are the **verbs** that help us get work done.
+**dplyr** is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges. In fact if you were paying attention during the opening section on data frames you will have noticed that most of the activities we performed related to the following activities. In dplyr-speak there are the **verbs** that help us get work done.
 
 
     mutate() - adds new variables that are functions of existing variables
@@ -559,7 +559,7 @@ legend("topright",
 
 ### arrange()
 
-Use arrange for sorting the data frame by one or more columns. When using the basic data frame structure from R we had to use the **order()** function to help us generate a vector that has the row numbers of the data frame that correpsond to the desired order of display (lowest to highest, etc). 
+Use arrange for sorting the data frame by one or more columns. When using the basic data frame structure from R we had to use the **order()** function to help us generate a vector that has the row numbers of the data frame that correspond to the desired order of display (lowest to highest, etc). 
 
 Let's sort the data frame **dff** by age from oldest to youngest.
 First we'll use the older approach. While this will work, it is not exactly very intuitive.
@@ -575,7 +575,7 @@ arrange(df,desc(age))
 ```
 
 Next, let's sort **df** by gender (alphabetically) and then by age
-from olderst to youngest. The rows relating to a gender of **female** are going to be listed first because, alphabetically speaking, the letter "F" comes before the letter "M". Then within those categories we have the ages sorted from oldest to youngest.
+from oldest to youngest. The rows relating to a gender of **female** are going to be listed first because, alphabetically speaking, the letter "F" comes before the letter "M". Then within those categories we have the ages sorted from oldest to youngest.
 
 ```{r}
 arrange(df, gender,desc(age))
@@ -643,7 +643,7 @@ Find all the columns that include a "_" character
 select(testdf,matches("_"))
 ```
 
-This will select columns beginning with "m_" but only those with a suffx of 1 or 2.
+This will select columns beginning with "m_" but only those with a suffix of 1 or 2.
 
 ```{r}
 select(testdf,num_range("m_",1:2))
@@ -737,7 +737,7 @@ The key to understanding how this works is to **read** this from left to right. 
     - input of the **select** function whose output goes into the
     - input of the **head** function
 
-Let's use our new found knowledge to re-imagine our use of the **group_by** and **summarize** functions that we have been using in **composite** form up unitl now. 
+Let's use our new found knowledge to re-imagine our use of the **group_by** and **summarize** functions that we have been using in **composite** form up until now. 
 
 ## Using Pipes To Do Split-Apply-Combine
 
@@ -928,7 +928,7 @@ iris %>% group_by(Species) %>% summarize(mean=mean(Sepal.Length),
 
 # Your Turn
 
-Now it's time for you to try some exercises on your own. The **ggplot2** package (which is part of the larger **tidyverse** comes with some data sets one of which is called **msleep**. It's easy to load into your workspace:
+Now it's time for you to try some exercises on your own. The **ggplot2** package (which is part of the larger **tidyverse** comes with some data sets one of which is called **msleep**. It's easy to load into your work space:
 
 ```{r}
 data(msleep)
@@ -951,7 +951,7 @@ str(msleep)
 ```
 
 
-Not only is this a new data frame for you it also has the added challenge of containing some missing values - those pesky "NAs". In the older approach we used the function **complete.cases** to help us figure out which rows had at least one missin value. We could still use that here although the **dplyr** world has a function called **drop_na()** which could be used but itself or as part of a pipeline. 
+Not only is this a new data frame for you it also has the added challenge of containing some missing values - those pesky "NAs". In the older approach we used the function **complete.cases** to help us figure out which rows had at least one missing value. We could still use that here although the **dplyr** world has a function called **drop_na()** which could be used but itself or as part of a pipeline. 
 
 
 Here are some questions I want you to answer. Note that the answers are provided so you can check your work. However, the code used to generate the answer is not visible. There is typically more than one way to answer the question. 
@@ -1039,7 +1039,7 @@ chi <- read_csv("chi_crimes.csv")
 
 ## Inspecting the Data
 
-The way the data is organzied is that each row represents a call to the police which may or may not result in an actual arrest. In any case there will be a case number assigned to the call and other information such as the Best, Ward, Block, and Community Area will be noted.  If there is an arrest it will be recorded and then it will be categorized according to an FBI code. The location of the call will be recorded in latitude and longitude. Some basic questions might be how many rows and columns there are, etc
+The way the data is organized is that each row represents a call to the police which may or may not result in an actual arrest. In any case there will be a case number assigned to the call and other information such as the Best, Ward, Block, and Community Area will be noted.  If there is an arrest it will be recorded and then it will be categorized according to an FBI code. The location of the call will be recorded in latitude and longitude. Some basic questions might be how many rows and columns there are, etc
 
 
 ```{r}
@@ -1053,7 +1053,7 @@ chi %>% summarize_all(n_distinct)
 ```
 
 
-From viewing thism perhaps variables like Arrest, Domestic, FBI Code, District, and Ward could be good summary variables. We don't really have any kind of measured data here. 
+From viewing this perhaps variables like Arrest, Domestic, FBI Code, District, and Ward could be good summary variables. We don't really have any kind of measured data here. 
 
 We do have lots of dates which at this point are actually character strings so let's turn them into dates and then work with them to get some more summary variables created. There are also some latitude and longitude information that we perhaps later use to draw some maps if we want. We'll consider that later. 
 
@@ -1140,7 +1140,7 @@ chi %>%
   arrange(desc(n))
 ```
 
-So let's plot a bar chart that shows is the total number of calls to the police for each month and what portion of those calls each monht resulted in an arrest.
+So let's plot a bar chart that shows is the total number of calls to the police for each month and what portion of those calls each month resulted in an arrest.
 
 ```{r}
 chi %>% count(Arrest,Month) %>% 
@@ -1201,7 +1201,7 @@ chi %>%
   ggplot(aes(x=ydays,y=total_calls)) + geom_line() + facet_grid(am_pm~.)
 ```
 
-That looks okay but what about changing the arrangmenet of the panels ? That's easy - we just change the formula in the **facet_grid** layer
+That looks okay but what about changing the arrangement of the panels ? That's easy - we just change the formula in the **facet_grid** layer
 
 ```{r}
 chi %>% 
@@ -1280,7 +1280,7 @@ chi %>% group_by(Arrest,`Primary Type`) %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-This is illuminating in that almost all the calls relating to NARCOTICS seem to result in an arrest. Let's examine these offenses in greater detail since they don't seem to fit the pattern. That is most of the other crime reports don't seem to result in arrest expcept maybe prostitution, criminal trespass, and weapons violation. We can drill down some more. Let's slice out the lower 10 of the top 20. 
+This is illuminating in that almost all the calls relating to NARCOTICS seem to result in an arrest. Let's examine these offenses in greater detail since they don't seem to fit the pattern. That is most of the other crime reports don't seem to result in arrest except maybe prostitution, criminal trespass, and weapons violation. We can drill down some more. Let's slice out the lower 10 of the top 20. 
 
 
 ```{r}
@@ -1390,7 +1390,7 @@ ggmap(chi_map) +
   )
 ```
 
-We can use some predefined terms such as "..level.." to get counts of the lat lons in an area which will then be reflected in "fill". This plot winds up being very cool and informative. We can see that the Nartotics offenses are happening on the East Side and near the University Village and Little Italy. 
+We can use some predefined terms such as "..level.." to get counts of the lat lons in an area which will then be reflected in "fill". This plot winds up being very cool and informative. We can see that the Narcotics offenses are happening on the East Side and near the University Village and Little Italy. 
 
 ```{r getmap13,cache=TRUE,eval=FALSE}
 chi_map_13 <- get_map("Chicago,Illinois",zoom=13,extent="device")
@@ -1399,11 +1399,11 @@ chi_map_13 <- get_map("Chicago,Illinois",zoom=13,extent="device")
 
 
 ```{r statd13,eval=FALSE}
-#ggmap(chi_map_13) +
-#  stat_density2d(
-#    aes(x = Longitude, y =Latitude, fill = ..level..,
-#        alpha = ..level..),
-#    size = 2, bins = 4, data = narcotics, geom = "polygon")
+ggmap(chi_map_13) +
+  stat_density2d(
+    aes(x = Longitude, y =Latitude, fill = ..level..,
+        alpha = ..level..),
+    size = 2, bins = 4, data = narcotics, geom = "polygon")
 
 ```
 
@@ -1430,9 +1430,9 @@ ChiMap +
 
 ## Leaflet 
 
-**Leaflet** is a javascript library that simplifies the creation of maps and placement of markers there upon. R has a companion package called "leaflet" that you can use to help create some really nice maps. All that is required is some latitutde and longtiude information which we already have since we are working with the Chicago data. 
+**Leaflet** is a javascript library that simplifies the creation of maps and placement of markers there upon. R has a companion package called "leaflet" that you can use to help create some really nice maps. All that is required is some latitude and longitude information which we already have since we are working with the Chicago data. 
 
-Let's continue with the Narcotics data and see where these are occurring. I think you will like the output that leafelt provides because it is interactive and you can zoom in and out of the data
+Let's continue with the Narcotics data and see where these are occurring. I think you will like the output that leaflet provides because it is interactive and you can zoom in and out of the data
 
 
 ```{r leaflet}

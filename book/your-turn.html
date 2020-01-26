@@ -217,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="your-turn" class="section level1">
 <h1><span class="header-section-number">Chapter 5</span> Your Turn</h1>
-<p>Now it’s time for you to try some exercises on your own. The <strong>ggplot2</strong> package (which is part of the larger <strong>tidyverse</strong> comes with some data sets one of which is called <strong>msleep</strong>. It’s easy to load into your workspace:</p>
+<p>Now it’s time for you to try some exercises on your own. The <strong>ggplot2</strong> package (which is part of the larger <strong>tidyverse</strong> comes with some data sets one of which is called <strong>msleep</strong>. It’s easy to load into your work space:</p>
 <div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" data-line-number="1"><span class="kw">data</span>(msleep)</a></code></pre></div>
 <p>This data set is</p>
 <blockquote>
@@ -244,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  $ awake       : num  11.9 7 9.6 9.1 20 9.6 15.3 17 13.9 21 ...
 ##  $ brainwt     : num  NA 0.0155 NA 0.00029 0.423 NA NA NA 0.07 0.0982 ...
 ##  $ bodywt      : num  50 0.48 1.35 0.019 600 ...</code></pre>
-<p>Not only is this a new data frame for you it also has the added challenge of containing some missing values - those pesky “NAs”. In the older approach we used the function <strong>complete.cases</strong> to help us figure out which rows had at least one missin value. We could still use that here although the <strong>dplyr</strong> world has a function called <strong>drop_na()</strong> which could be used but itself or as part of a pipeline.</p>
+<p>Not only is this a new data frame for you it also has the added challenge of containing some missing values - those pesky “NAs”. In the older approach we used the function <strong>complete.cases</strong> to help us figure out which rows had at least one missing value. We could still use that here although the <strong>dplyr</strong> world has a function called <strong>drop_na()</strong> which could be used but itself or as part of a pipeline.</p>
 <p>Here are some questions I want you to answer. Note that the answers are provided so you can check your work. However, the code used to generate the answer is not visible. There is typically more than one way to answer the question.</p>
 <div id="what-is-the-average-total-sleep-time-for-omnivores" class="section level4">
 <h4><span class="header-section-number">5.0.0.1</span> What is the average total sleep time for Omnivores ?</h4>

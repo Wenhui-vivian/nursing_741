@@ -217,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="digging-in" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Digging In</h1>
-<p>Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or “features” that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogenous. When viewed as a column, the data is homogenous.</p>
+<p>Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or “features” that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogeneous. When viewed as a column, the data is homogeneous.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">data</span>(mtcars)</a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">mtcars</a></code></pre></div>
 <pre><code>##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
@@ -534,7 +534,7 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 </div>
 <div id="continuous-vs-factors" class="section level2">
 <h2><span class="header-section-number">2.7</span> Continuous vs Factors</h2>
-<p>One <strong>recipe</strong> that I use frequently is given below. This tells me how many unqiue values are assumed by each column which then helps to identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don’t let the code here scare you. If you are new to R and don’t yet understand what is going on then just use this as a “recipe” for now.</p>
+<p>One <strong>recipe</strong> that I use frequently is given below. This tells me how many unique values are assumed by each column which then helps to identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don’t let the code here scare you. If you are new to R and don’t yet understand what is going on then just use this as a “recipe” for now.</p>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="kw">sapply</span>(mtcars, <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x)))</a></code></pre></div>
 <pre><code>##  mpg  cyl disp   hp drat   wt qsec   vs   am gear carb 
 ##   25    3   27   22   22   29   30    2    2    3    6</code></pre>
@@ -562,7 +562,7 @@ wt &lt; 2.0 ? We use the bracket notation to help us. We can pass logical condit
 </div>
 <div id="sorting-data" class="section level2">
 <h2><span class="header-section-number">2.8</span> Sorting data</h2>
-<p>Sorting rows in a data fram is a common activity. However, in Base R this is called “ordering” because of the function used to “order” the data. Let’s say we want to sort or “order” the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the <strong>order</strong> function’s output. What are those numbers ?</p>
+<p>Sorting rows in a data frame is a common activity. However, in Base R this is called “ordering” because of the function used to “order” the data. Let’s say we want to sort or “order” the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the <strong>order</strong> function’s output. What are those numbers ?</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="kw">order</span>(mtcars<span class="op">$</span>mpg)</a></code></pre></div>
 <pre><code>##  [1] 15 16 24  7 17 31 14 23 22 29 12 13 11  6  5 10 25 30  1  2  4 32 21
 ## [24]  3  9  8 27 26 19 28 18 20</code></pre>

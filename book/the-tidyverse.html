@@ -243,7 +243,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="dplyr-basics" class="section level2">
 <h2><span class="header-section-number">3.2</span> dplyr Basics</h2>
-<p><strong>dplyr</strong> is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges. In fact if you were paying attention during the opening section on data frames you will have noticed that most of the activities we performed related to the following activires. In dplyr-speak there are the <strong>verbs</strong> that help us get work done.</p>
+<p><strong>dplyr</strong> is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges. In fact if you were paying attention during the opening section on data frames you will have noticed that most of the activities we performed related to the following activities. In dplyr-speak there are the <strong>verbs</strong> that help us get work done.</p>
 <pre><code>mutate() - adds new variables that are functions of existing variables
 select() - picks variables based on their names.
 filter() - picks cases based on their values.
@@ -315,7 +315,7 @@ arrange() - changes the ordering of the rows.</code></pre>
 </div>
 <div id="arrange" class="section level3">
 <h3><span class="header-section-number">3.3.3</span> arrange()</h3>
-<p>Use arrange for sorting the data frame by one or more columns. When using the basic data frame structure from R we had to use the <strong>order()</strong> function to help us generate a vector that has the row numbers of the data frame that correpsond to the desired order of display (lowest to highest, etc).</p>
+<p>Use arrange for sorting the data frame by one or more columns. When using the basic data frame structure from R we had to use the <strong>order()</strong> function to help us generate a vector that has the row numbers of the data frame that correspond to the desired order of display (lowest to highest, etc).</p>
 <p>Let’s sort the data frame <strong>dff</strong> by age from oldest to youngest.
 First we’ll use the older approach. While this will work, it is not exactly very intuitive.</p>
 <div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1">df[<span class="kw">rev</span>(<span class="kw">order</span>(df<span class="op">$</span>age)),]</a></code></pre></div>
@@ -334,7 +334,7 @@ First we’ll use the older approach. While this will work, it is not exactly ve
 ## 4  4   MALE  64
 ## 5  3 FEMALE  60</code></pre>
 <p>Next, let’s sort <strong>df</strong> by gender (alphabetically) and then by age
-from olderst to youngest. The rows relating to a gender of <strong>female</strong> are going to be listed first because, alphabetically speaking, the letter “F” comes before the letter “M”. Then within those categories we have the ages sorted from oldest to youngest.</p>
+from oldest to youngest. The rows relating to a gender of <strong>female</strong> are going to be listed first because, alphabetically speaking, the letter “F” comes before the letter “M”. Then within those categories we have the ages sorted from oldest to youngest.</p>
 <div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="kw">arrange</span>(df, gender,<span class="kw">desc</span>(age))</a></code></pre></div>
 <pre><code>##   id gender age
 ## 1  5 FEMALE  68
@@ -468,7 +468,7 @@ from olderst to youngest. The rows relating to a gender of <strong>female</stron
 ## 14  70  60  70
 ## 15  60  60  70
 ## 16  70  60  70</code></pre>
-<p>This will select columns beginning with “m_” but only those with a suffx of 1 or 2.</p>
+<p>This will select columns beginning with “m_” but only those with a suffix of 1 or 2.</p>
 <div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" data-line-number="1"><span class="kw">select</span>(testdf,<span class="kw">num_range</span>(<span class="st">&quot;m_&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>))</a></code></pre></div>
 <pre><code>##    m_1 m_2
 ## 1   60  50
