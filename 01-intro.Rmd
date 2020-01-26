@@ -1,6 +1,6 @@
 # Digging In
 
-Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or "features" that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogenous. When viewed as a column, the data is homogenous. 
+Data frames look like an Excel Spreadsheet. The rows are observations and the columns are variables or "features" that represent some measurement or character-based description of a given observation. When viewed from the row point of view, the data can be heterogeneous. When viewed as a column, the data is homogeneous. 
 
 ```{r}
 data(mtcars)
@@ -137,7 +137,7 @@ mtcars[mtcars$mpg > quantile(mtcars$mpg)[4],]
 
 This is big deal. Most "real" data has rows that do not contain values for all columns. This is the so called "missing value" problem. Here is an example. The following code will read in a version of the mtcars data frame that has some missing values:
 
-```{r eval=FALSE}
+```{r eval=F}
 url <- "https://raw.githubusercontent.com/steviep42/utilities/master/data/mtcars_na.csv"
 (mtcars_na <- read.csv(url, stringsAsFactors = FALSE))
 ```
@@ -189,7 +189,7 @@ na.omit(mtcars_na)
 
 ## Continuous vs Factors
 
-One **recipe** that I use frequently is given below. This tells me how many unqiue values are assumed by each column which then helps to  identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don't let the code here scare you. If you are new to R and don't yet understand what is going on then just use this as a "recipe" for now. 
+One **recipe** that I use frequently is given below. This tells me how many unique values are assumed by each column which then helps to  identify continuous quantities and categories. If a column assumes only a small number of unique values then perhaps it should be classified as a factor. Don't let the code here scare you. If you are new to R and don't yet understand what is going on then just use this as a "recipe" for now. 
 
 ```{r}
 sapply(mtcars, function(x) length(unique(x)))
@@ -237,7 +237,7 @@ ggplot(mtcars,aes(x=wt,y=mpg)) +
 
 ## Sorting data
 
-Sorting rows in a data fram is a common activity. However, in Base R this is called "ordering" because of the function used to "order" the data. Let's say we want to sort or "order" the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the **order** function's output. What are those numbers ? 
+Sorting rows in a data frame is a common activity. However, in Base R this is called "ordering" because of the function used to "order" the data. Let's say we want to sort or "order" the mtcars data frame such that the row with the lowest mpg value is listed first and the row with the highest mpg value is listed last. First, look at the **order** function's output. What are those numbers ? 
 
 
 ```{r}
