@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Merging Data Frames | Intro To dplyr</title>
+  <meta name="description" content="An Intro to data manipulation with dplyr" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Merging Data Frames | Intro To dplyr" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="An Intro to data manipulation with dplyr" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Merging Data Frames | Intro To dplyr" />
+  
+  <meta name="twitter:description" content="An Intro to data manipulation with dplyr" />
+  
+
+<meta name="author" content="Steve Pittard" />
+
+
+<meta name="date" content="2020-01-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="split-apply-combine.html"/>
+<link rel="next" href="your-turn.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.2/leaflet.js"></script>
+<link href="libs/leaflet-markercluster-1.0.5/MarkerCluster.css" rel="stylesheet" />
+<link href="libs/leaflet-markercluster-1.0.5/MarkerCluster.Default.css" rel="stylesheet" />
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.js"></script>
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.freezable.js"></script>
+<script src="libs/leaflet-markercluster-1.0.5/leaflet.markercluster.layersupport.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Intro To dplyr</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> R Data Structures</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#vectors"><i class="fa fa-check"></i><b>1.1</b> Vectors</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#data-frames"><i class="fa fa-check"></i><b>1.2</b> Data Frames</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#a-reference-data-frame"><i class="fa fa-check"></i><b>1.3</b> A Reference Data Frame</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#relation-to-dplyr"><i class="fa fa-check"></i><b>1.4</b> Relation to dplyr</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="digging-in.html"><a href="digging-in.html"><i class="fa fa-check"></i><b>2</b> Digging In</a><ul>
+<li class="chapter" data-level="2.1" data-path="digging-in.html"><a href="digging-in.html#structure"><i class="fa fa-check"></i><b>2.1</b> Structure</a></li>
+<li class="chapter" data-level="2.2" data-path="digging-in.html"><a href="digging-in.html#meta-information"><i class="fa fa-check"></i><b>2.2</b> Meta Information</a></li>
+<li class="chapter" data-level="2.3" data-path="digging-in.html"><a href="digging-in.html#printing"><i class="fa fa-check"></i><b>2.3</b> Printing</a></li>
+<li class="chapter" data-level="2.4" data-path="digging-in.html"><a href="digging-in.html#accessing-rows-and-columns"><i class="fa fa-check"></i><b>2.4</b> Accessing Rows And Columns</a></li>
+<li class="chapter" data-level="2.5" data-path="digging-in.html"><a href="digging-in.html#interrogation"><i class="fa fa-check"></i><b>2.5</b> Interrogation</a></li>
+<li class="chapter" data-level="2.6" data-path="digging-in.html"><a href="digging-in.html#missing-values"><i class="fa fa-check"></i><b>2.6</b> Missing values</a></li>
+<li class="chapter" data-level="2.7" data-path="digging-in.html"><a href="digging-in.html#continuous-vs-factors"><i class="fa fa-check"></i><b>2.7</b> Continuous vs Factors</a></li>
+<li class="chapter" data-level="2.8" data-path="digging-in.html"><a href="digging-in.html#sorting-data"><i class="fa fa-check"></i><b>2.8</b> Sorting data</a></li>
+<li class="chapter" data-level="2.9" data-path="digging-in.html"><a href="digging-in.html#reading-csv-files"><i class="fa fa-check"></i><b>2.9</b> Reading CSV Files</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-tidyverse.html"><a href="the-tidyverse.html"><i class="fa fa-check"></i><b>3</b> The tidyverse</a><ul>
+<li class="chapter" data-level="3.1" data-path="the-tidyverse.html"><a href="the-tidyverse.html#installing"><i class="fa fa-check"></i><b>3.1</b> Installing</a></li>
+<li class="chapter" data-level="3.2" data-path="the-tidyverse.html"><a href="the-tidyverse.html#dplyr-basics"><i class="fa fa-check"></i><b>3.2</b> dplyr Basics</a></li>
+<li class="chapter" data-level="3.3" data-path="the-tidyverse.html"><a href="the-tidyverse.html#first-steps"><i class="fa fa-check"></i><b>3.3</b> First Steps</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="the-tidyverse.html"><a href="the-tidyverse.html#filter"><i class="fa fa-check"></i><b>3.3.1</b> filter()</a></li>
+<li class="chapter" data-level="3.3.2" data-path="the-tidyverse.html"><a href="the-tidyverse.html#mutate"><i class="fa fa-check"></i><b>3.3.2</b> mutate()</a></li>
+<li class="chapter" data-level="3.3.3" data-path="the-tidyverse.html"><a href="the-tidyverse.html#arrange"><i class="fa fa-check"></i><b>3.3.3</b> arrange()</a></li>
+<li class="chapter" data-level="3.3.4" data-path="the-tidyverse.html"><a href="the-tidyverse.html#select"><i class="fa fa-check"></i><b>3.3.4</b> select()</a></li>
+<li class="chapter" data-level="3.3.5" data-path="the-tidyverse.html"><a href="the-tidyverse.html#group_by"><i class="fa fa-check"></i><b>3.3.5</b> group_by()</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="split-apply-combine.html"><a href="split-apply-combine.html"><i class="fa fa-check"></i><b>4</b> Split Apply Combine</a><ul>
+<li class="chapter" data-level="4.1" data-path="split-apply-combine.html"><a href="split-apply-combine.html#what-are-pipes"><i class="fa fa-check"></i><b>4.1</b> What Are Pipes ?</a></li>
+<li class="chapter" data-level="4.2" data-path="split-apply-combine.html"><a href="split-apply-combine.html#using-pipes-to-do-split-apply-combine"><i class="fa fa-check"></i><b>4.2</b> Using Pipes To Do Split-Apply-Combine</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="split-apply-combine.html"><a href="split-apply-combine.html#saving-results"><i class="fa fa-check"></i><b>4.2.1</b> Saving Results</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="split-apply-combine.html"><a href="split-apply-combine.html#an-example"><i class="fa fa-check"></i><b>4.3</b> An Example</a></li>
+<li class="chapter" data-level="4.4" data-path="split-apply-combine.html"><a href="split-apply-combine.html#working-with-flowers"><i class="fa fa-check"></i><b>4.4</b> Working With Flowers</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="split-apply-combine.html"><a href="split-apply-combine.html#structure-of-the-data-frame"><i class="fa fa-check"></i><b>4.4.1</b> Structure of The Data frame</a></li>
+<li class="chapter" data-level="4.4.2" data-path="split-apply-combine.html"><a href="split-apply-combine.html#more-practice"><i class="fa fa-check"></i><b>4.4.2</b> More Practice</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="merging-data-frames.html"><a href="merging-data-frames.html"><i class="fa fa-check"></i><b>5</b> Merging Data Frames</a><ul>
+<li class="chapter" data-level="5.1" data-path="merging-data-frames.html"><a href="merging-data-frames.html#using-keys"><i class="fa fa-check"></i><b>5.1</b> Using keys</a></li>
+<li class="chapter" data-level="5.2" data-path="merging-data-frames.html"><a href="merging-data-frames.html#full_join"><i class="fa fa-check"></i><b>5.2</b> full_join()</a></li>
+<li class="chapter" data-level="5.3" data-path="merging-data-frames.html"><a href="merging-data-frames.html#inner_join"><i class="fa fa-check"></i><b>5.3</b> inner_join()</a></li>
+<li class="chapter" data-level="5.4" data-path="merging-data-frames.html"><a href="merging-data-frames.html#left_join"><i class="fa fa-check"></i><b>5.4</b> left_join()</a></li>
+<li class="chapter" data-level="5.5" data-path="merging-data-frames.html"><a href="merging-data-frames.html#right_join"><i class="fa fa-check"></i><b>5.5</b> right_join()</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="your-turn.html"><a href="your-turn.html"><i class="fa fa-check"></i><b>6</b> Your Turn</a></li>
+<li class="chapter" data-level="7" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html"><i class="fa fa-check"></i><b>7</b> Chicago Crime Data</a><ul>
+<li class="chapter" data-level="7.1" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#getting-the-data"><i class="fa fa-check"></i><b>7.1</b> Getting the Data</a></li>
+<li class="chapter" data-level="7.2" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#inspecting-the-data"><i class="fa fa-check"></i><b>7.2</b> Inspecting the Data</a></li>
+<li class="chapter" data-level="7.3" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#creating-some-dates"><i class="fa fa-check"></i><b>7.3</b> Creating Some Dates</a></li>
+<li class="chapter" data-level="7.4" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#count-arrests"><i class="fa fa-check"></i><b>7.4</b> Count Arrests</a></li>
+<li class="chapter" data-level="7.5" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#crime-at-day-vs-night"><i class="fa fa-check"></i><b>7.5</b> Crime At Day vs Night</a></li>
+<li class="chapter" data-level="7.6" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#line-graphs-and-histograms"><i class="fa fa-check"></i><b>7.6</b> Line Graphs and Histograms</a></li>
+<li class="chapter" data-level="7.7" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#calendar-map"><i class="fa fa-check"></i><b>7.7</b> Calendar Map</a></li>
+<li class="chapter" data-level="7.8" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#what-types-of-crime-do-we-see"><i class="fa fa-check"></i><b>7.8</b> What Types of Crime Do We See ?</a></li>
+<li class="chapter" data-level="7.9" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#creating-a-map"><i class="fa fa-check"></i><b>7.9</b> Creating A Map</a></li>
+<li class="chapter" data-level="7.10" data-path="chicago-crime-data.html"><a href="chicago-crime-data.html#leaflet"><i class="fa fa-check"></i><b>7.10</b> Leaflet</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Intro To dplyr</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="merging-data-frames" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Merging Data Frames</h1>
+<p>This section describes the process of joiningg data frames which is an important skill to have. R has a command called <strong>merge</strong> which can handle some of these tasks but if you look in the help pages for this command it will in turn make references to “join operations” which is a more general way to describe mering activity. In reality joining tables is quite common in SQL (Structured Query Language) so developing facility will pay dividends in the future. Let’s start with a very basic example. The data is simple.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inventory &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">part_num=</span><span class="kw">c</span>(<span class="st">&quot;001&quot;</span>,<span class="st">&quot;002&quot;</span>,<span class="st">&quot;003&quot;</span>),
+                    <span class="dt">description=</span><span class="kw">c</span>(<span class="st">&quot;Indispensable Widget&quot;</span>,
+                                  <span class="st">&quot;Flux Capacitor&quot;</span>,
+                                  <span class="st">&quot;Radiator&quot;</span>),
+                    <span class="dt">price=</span><span class="kw">c</span>(<span class="dv">20</span>,<span class="dv">25</span>,<span class="dv">15</span>),<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+                    
+sales &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">part_num=</span><span class="kw">c</span>(<span class="st">&quot;001&quot;</span>,<span class="st">&quot;001&quot;</span>,<span class="st">&quot;001&quot;</span>,<span class="st">&quot;003&quot;</span>,<span class="st">&quot;110&quot;</span>),
+                    <span class="dt">quantity_sold=</span><span class="kw">c</span>(<span class="dv">23</span>,<span class="dv">100</span>,<span class="dv">44</span>,<span class="dv">98</span>,<span class="dv">98</span>),
+               <span class="dt">sales_regions=</span><span class="kw">c</span>(<span class="st">&quot;east&quot;</span>,<span class="st">&quot;west&quot;</span>,<span class="st">&quot;north&quot;</span>,<span class="st">&quot;north&quot;</span>,<span class="st">&quot;south&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div id="using-keys" class="section level2">
+<h2><span class="header-section-number">5.1</span> Using keys</h2>
+<p>So the first data frame represents and inventory that lists part numbers, their descriptions, and current quantity in inventory. Basically, one line for each part.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inventory</code></pre></div>
+<pre><code>##   part_num          description price
+## 1      001 Indispensable Widget    20
+## 2      002       Flux Capacitor    25
+## 3      003             Radiator    15</code></pre>
+<p>The second data frame, sales, represents the sales of various parts within one or more regions. Notice that no quantity of part 2 was sold at all. Notice also that 3 units of part number 1 were sold in three regions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sales</code></pre></div>
+<pre><code>##   part_num quantity_sold sales_regions
+## 1      001            23          east
+## 2      001           100          west
+## 3      001            44         north
+## 4      003            98         north
+## 5      110            98         south</code></pre>
+<p>What if we wanted <em>merge</em> or <em>join</em> these two data frames in various ways. Let’s explore these. So the <strong>part_num</strong> column in each data frame appears to relate to the same thing so this will be our <strong>key</strong> by which to merge the two data sources.</p>
+<p>To visualize what various joins look like here is a diagram from <a href="https://r4ds.had.co.nz/">R for Data Science</a></p>
+<div class="figure">
+<img src="figures/joining.png" />
+
+</div>
+</div>
+<div id="full_join" class="section level2">
+<h2><span class="header-section-number">5.2</span> full_join()</h2>
+<p>We will start with a <strong>full_join</strong> which will seek to involve all rows in both data frames based on a matching <strong>key</strong> which, in this case, is the <strong>part_num</strong> column.</p>
+<p>Let’s use the two data frames, along with a join command, to create a single table that contains a sales report for <strong>all</strong> part numbers even if there were no sales of that part number or it is not in the current inventory.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">full_join</span>(inventory,sales)</code></pre></div>
+<pre><code>## Joining, by = &quot;part_num&quot;</code></pre>
+<pre><code>##   part_num          description price quantity_sold sales_regions
+## 1      001 Indispensable Widget    20            23          east
+## 2      001 Indispensable Widget    20           100          west
+## 3      001 Indispensable Widget    20            44         north
+## 4      002       Flux Capacitor    25            NA          &lt;NA&gt;
+## 5      003             Radiator    15            98         north
+## 6      110                 &lt;NA&gt;    NA            98         south</code></pre>
+<p>This table includes all matched records (using <strong>part_num</strong> as a <strong>key</strong>) from both the data frames. The operation will supply NA values for missing matches on either side. What does “matched records” mean ?</p>
+<div class="figure">
+<img src="figures/inventorymatch1.png" width="550" />
+
+</div>
+<div class="figure">
+<img src="figures/salesmatch1.png" />
+
+</div>
+<p>Notice we see part number 002 even though there were no sales. We also see a row for part 110 even though it doesn’t appear in the inventory. Notice that there are missing values.</p>
+<p>The reason we get a value of NA for <strong>description</strong> and <strong>price</strong> in the 6th row is that part number 110 does not exist within the <strong>inventory</strong> data frame. So, to reasonably include the information in the fully joined data, the NAs must be provided as placeholders for the missing values.</p>
+<p>Also notice that there are missing values for the quantity and sales_regions realtive to part number 002 since it doesn’t appear within the sales data frame.</p>
+</div>
+<div id="inner_join" class="section level2">
+<h2><span class="header-section-number">5.3</span> inner_join()</h2>
+<p>Next, let’s create a joined table that shows <strong>only</strong> information for parts listed in inventory and only those parts that had at least one transaction. In effect we want only rows that are in common (based on the <strong>part_num</strong> key) to both data frames.</p>
+<p>The <strong>inner_join</strong> will produce a data frame that includes rows pertaining to part numbers <em>in common</em> to both data frames. An inner join matches pairs of observations whenever their keys are equal.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">inner_join</span>(inventory,sales)</code></pre></div>
+<pre><code>## Joining, by = &quot;part_num&quot;</code></pre>
+<pre><code>##   part_num          description price quantity_sold sales_regions
+## 1      001 Indispensable Widget    20            23          east
+## 2      001 Indispensable Widget    20           100          west
+## 3      001 Indispensable Widget    20            44         north
+## 4      003             Radiator    15            98         north</code></pre>
+<p>This would mean then that the row in the sales data frame that refers to a part number of 110 would be omitted in the result since it does not occur in the inventory data frame. Part number 002 does not appear in the sales data frame so it is not listed here.</p>
+</div>
+<div id="left_join" class="section level2">
+<h2><span class="header-section-number">5.4</span> left_join()</h2>
+<p>Next up we have the <strong>left_join</strong> which will “favor” the first data frame referenced in the command in that it will include rows from inventory AND rows from <strong>sales</strong> where the <strong>part_num</strong> matches. So part number 002 is still included even though it does not appear in the <strong>sales</strong> data frame.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">left_join</span>(inventory,sales)</code></pre></div>
+<pre><code>## Joining, by = &quot;part_num&quot;</code></pre>
+<pre><code>##   part_num          description price quantity_sold sales_regions
+## 1      001 Indispensable Widget    20            23          east
+## 2      001 Indispensable Widget    20           100          west
+## 3      001 Indispensable Widget    20            44         north
+## 4      002       Flux Capacitor    25            NA          &lt;NA&gt;
+## 5      003             Radiator    15            98         north</code></pre>
+</div>
+<div id="right_join" class="section level2">
+<h2><span class="header-section-number">5.5</span> right_join()</h2>
+<p>The right_join() will favor the second specified data frame which it will return all the rows from sales and rows from sales where the part number matches. This is why we get a line in the result for part 110 that includes missing values for description and price since those values are missing the inventory data frame.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">right_join</span>(inventory,sales)</code></pre></div>
+<pre><code>## Joining, by = &quot;part_num&quot;</code></pre>
+<pre><code>##   part_num          description price quantity_sold sales_regions
+## 1      001 Indispensable Widget    20            23          east
+## 2      001 Indispensable Widget    20           100          west
+## 3      001 Indispensable Widget    20            44         north
+## 4      003             Radiator    15            98         north
+## 5      110                 &lt;NA&gt;    NA            98         south</code></pre>
+<p>There are other join types but these cover the main ones.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="split-apply-combine.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="your-turn.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["nursing_741.pdf", "nursing_741.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
