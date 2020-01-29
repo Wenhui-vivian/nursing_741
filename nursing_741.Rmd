@@ -459,6 +459,8 @@ head(data1)
 
 # The tidyverse
 
+![](./figures/tidyverse.png)
+
 The **dplyr** package is part of the larger **tidyverse** package set which has expanded considerably in recent years and continues to grow in size and utility such that many people never learn the "older way" of doing things in R. But we've already been through that in the previous section. The tidyverse has the following packages. The descriptions have been lifted from the [tidyverse home page](https://www.tidyverse.org/packages/).
 
 **ggplot2** - ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
