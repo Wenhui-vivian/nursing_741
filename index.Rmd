@@ -39,6 +39,31 @@ temp[1]
 pulse[3:5]
 ```
 
+Base R likes to use the the composite function style. Not surprising since the language was written by statisticians. Create some vectors
+
+```{r}
+# create a sequence of numbers
+
+# looks like f(x)
+seq(0,16,4)
+
+# looks like f(g(x))
+str(seq(0,16,4))
+
+# create some numbers from a Normal distributions
+rnorm(10)
+
+# Looks like f(g(x))
+hist(rnorm(100000))
+
+# You kind of know what you want to do before you type it
+# What about this ? 
+
+rnorm(100000) %>% hist()
+```
+
+
+
 We can also use logical expressions to find elements that satisfy some condition. This is a very powerful capability in R. 
 
 ```{r}

@@ -727,8 +727,8 @@ chi <- chi %>% mutate(am_pm=ifelse(grepl("PM",Date),"PM","AM"))
 
 # Let's turn them into actual dates and times using the lubridate package
 
-chi$Date <- parse_date_time(chi$Date,'%m/%d/%Y %I:%M:%S %p')
-
+chi <- chi %>% 
+  mutate(Date = parse_date_time(chi$Date,'%m/%d/%Y %I:%M:%S %p'))
 range(chi$Date)
 ```
 
@@ -746,8 +746,9 @@ chi$Date %>% months %>% head
 
 # Let's add a factor to the data table/data frame that gives the month
 chi <- chi %>% mutate(Month=months(Date)) 
+chi <- chi %>% mutate(Month=factor(Month, levels = month.name))
 
-unique(chi$Month)
+chi %>% distinct(Month)
 ```
 
 
@@ -1069,7 +1070,7 @@ ggmap(chi_map) +
 
 We can use some predefined terms such as "..level.." to get counts of the lat lons in an area which will then be reflected in "fill". This plot winds up being very cool and informative. We can see that the Narcotics offenses are happening on the East Side and near the University Village and Little Italy. 
 
-```{r echo=FALSE}
+```{r echo=FALSE,val=FALSE}
 register_google(key="AIzaSyAl4fVkTWpnEFanFZaKegkkRNC-WOFZjBk")
 ```
 

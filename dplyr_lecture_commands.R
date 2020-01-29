@@ -12,19 +12,27 @@ temp[1]
 # Get elements 3,4, and 5 from pulse
 pulse[3:5]
 
-# series of numbers and composite functions
 
-seq(1,16,4)
+## ------------------------------------------------------------------------
+# create a sequence of numbers
 
-# Looks like f(x)
-rnorm(5)
+# looks like f(x)
+seq(0,16,4)
+
+# looks like f(g(x))
+str(seq(0,16,4))
+
+# create some numbers from a Normal distributions
+rnorm(10)
 
 # Looks like f(g(x))
-hist(rnorm(1000))
-hist(rnorm(1000000))
+hist(rnorm(100000))
 
-# Whoa ! What is this ? We'll get to this
-rnorm(1000000) %>% hist()
+# You kind of know what you want to do before you type it
+# What about this ? 
+
+rnorm(100000) %>% hist()
+
 
 ## ------------------------------------------------------------------------
 temp < 98
@@ -91,6 +99,13 @@ mean(my_df$temp)
 ## [, 9]	am	Transmission (0 = automatic, 1 = manual)
 ## [,10]	gear	Number of forward gears
 ## [,11]	carb	Number of carburetors
+
+
+## ----include=FALSE-------------------------------------------------------
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
 
 
 ## ------------------------------------------------------------------------
@@ -657,8 +672,8 @@ chi <- chi %>% mutate(am_pm=ifelse(grepl("PM",Date),"PM","AM"))
 
 # Let's turn them into actual dates and times using the lubridate package
 
-chi$Date <- parse_date_time(chi$Date,'%m/%d/%Y %I:%M:%S %p')
-
+chi <- chi %>% 
+  mutate(Date = parse_date_time(chi$Date,'%m/%d/%Y %I:%M:%S %p'))
 range(chi$Date)
 
 
@@ -674,8 +689,9 @@ chi$Date %>% months %>% head
 
 # Let's add a factor to the data table/data frame that gives the month
 chi <- chi %>% mutate(Month=months(Date)) 
+chi <- chi %>% mutate(Month=factor(Month, levels = month.name))
 
-unique(chi$Month)
+chi %>% distinct(Month)
 
 
 ## ------------------------------------------------------------------------
@@ -915,7 +931,7 @@ ggmap(chi_map) +
   )
 
 
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE,val=FALSE------------------------------------------------
 register_google(key="AIzaSyAl4fVkTWpnEFanFZaKegkkRNC-WOFZjBk")
 
 
@@ -960,4 +976,5 @@ m <- leaflet() %>%
              clusterOptions = markerClusterOptions())
 
 m
+
 

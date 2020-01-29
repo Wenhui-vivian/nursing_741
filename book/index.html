@@ -24,7 +24,7 @@
 <meta name="author" content="Steve Pittard" />
 
 
-<meta name="date" content="2020-01-27" />
+<meta name="date" content="2020-01-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -201,7 +201,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Intro To dplyr</h1>
 <p class="author"><em>Steve Pittard</em></p>
-<p class="date"><em>2020-01-27</em></p>
+<p class="date"><em>2020-01-28</em></p>
 </div>
 <div id="r-data-structures" class="section level1">
 <h1><span class="header-section-number">Chapter 1</span> R Data Structures</h1>
@@ -220,6 +220,27 @@ temp[<span class="dv">1</span>]</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get elements 3,4, and 5 from pulse</span>
 pulse[<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
 <pre><code>## [1] 83 85 90</code></pre>
+<p>Base R likes to use the the composite function style. Not surprising since the language was written by statisticians. Create some vectors</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a sequence of numbers</span>
+
+<span class="co"># looks like f(x)</span>
+<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">16</span>,<span class="dv">4</span>)</code></pre></div>
+<pre><code>## [1]  0  4  8 12 16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># looks like f(g(x))</span>
+<span class="kw">str</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">16</span>,<span class="dv">4</span>))</code></pre></div>
+<pre><code>##  num [1:5] 0 4 8 12 16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create some numbers from a Normal distributions</span>
+<span class="kw">rnorm</span>(<span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] -1.5080448  1.1984941 -0.2408286 -0.3006668 -2.2184947  0.3325012
+##  [7] -0.5955770 -0.6163712 -1.0431323  1.2738414</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Looks like f(g(x))</span>
+<span class="kw">hist</span>(<span class="kw">rnorm</span>(<span class="dv">100000</span>))</code></pre></div>
+<p><img src="nursing_741_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You kind of know what you want to do before you type it</span>
+<span class="co"># What about this ? </span>
+
+<span class="kw">rnorm</span>(<span class="dv">100000</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">hist</span>()</code></pre></div>
+<p><img src="nursing_741_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
 <p>We can also use logical expressions to find elements that satisfy some condition. This is a very powerful capability in R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp <span class="op">&lt;</span><span class="st"> </span><span class="dv">98</span></code></pre></div>
 <pre><code>## [1] FALSE FALSE  TRUE FALSE FALSE</code></pre>

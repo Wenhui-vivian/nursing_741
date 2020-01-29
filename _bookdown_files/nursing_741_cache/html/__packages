@@ -17,3 +17,12 @@ osmdata
 leaflet
 readxl
 sf
+gtrendsR
+ggthemes
+zoo
+xts
+PerformanceAnalytics
+TTR
+quantmod
+tidyquant
+knitr
