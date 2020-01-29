@@ -703,6 +703,14 @@ glimpse(chi)
 
 So let's check this data frame out some more. For example, what are the factors in this data frame ? Those that take on only a few different values might be good summary variables.
 
+The way to do this with Base R would be:
+
+```{r}
+sapply(chi,function(x) length(unique(x)))
+```
+
+The way to do this with dplyr could be:
+
 ```{r}
 chi %>% summarize_all(n_distinct)
 ```
@@ -752,7 +760,7 @@ chi %>% distinct(Month)
 ```
 
 
-Let's add in a few more factors based on the date since it will help us build some interesting tables as we try to understand the patterns in Chicago crime during the year of 2013. It is also important to understand how to work with dates since they wind up being important when looking at data. Not every data set will be a function of dates or be reliant upon them for interpretation but this one is. 
+Let's add in a few more factors based on the date since it will help us build some interesting tables as we try to understand the patterns in Chicago crime during the year of 2012. It is also important to understand how to work with dates since they wind up being important when looking at data. Not every data set will be a function of dates or be reliant upon them for interpretation but this one is. 
 
 It's also not necessary to create these categories in advance or make them part of the data frame. We could do this on the fly as we will see later. We will create a category to classify the quarter during which the call to the police occurred.
 
