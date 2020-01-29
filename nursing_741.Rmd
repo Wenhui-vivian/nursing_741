@@ -459,7 +459,7 @@ head(data1)
 
 # The tidyverse
 
-![](./figures/tidyverse.png)
+![](./figures/tidyverse.png){width=350}
 
 The **dplyr** package is part of the larger **tidyverse** package set which has expanded considerably in recent years and continues to grow in size and utility such that many people never learn the "older way" of doing things in R. But we've already been through that in the previous section. The tidyverse has the following packages. The descriptions have been lifted from the [tidyverse home page](https://www.tidyverse.org/packages/).
 
