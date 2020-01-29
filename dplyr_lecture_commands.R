@@ -12,6 +12,19 @@ temp[1]
 # Get elements 3,4, and 5 from pulse
 pulse[3:5]
 
+# series of numbers and composite functions
+
+seq(1,16,4)
+
+# Looks like f(x)
+rnorm(5)
+
+# Looks like f(g(x))
+hist(rnorm(1000))
+hist(rnorm(1000000))
+
+# Whoa ! What is this ? We'll get to this
+rnorm(1000000) %>% hist()
 
 ## ------------------------------------------------------------------------
 temp < 98
